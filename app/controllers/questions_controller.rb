@@ -1,6 +1,10 @@
 class QuestionsController < ApplicationController
   before_action :question, only: %w[show]
 
+  def index
+    @questions = Question.all
+  end
+
   def new
     @question = Question.new
   end
@@ -10,7 +14,8 @@ class QuestionsController < ApplicationController
     if @question.save
       redirect_to @question, notice: 'question successfully created'
     else
-      redirect_to new_question_path, alert: 'please, enter valid data'
+      flash.now[:alert] = 'please, enter valid data'
+      render :new
     end
   end
 
