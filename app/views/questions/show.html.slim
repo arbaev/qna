@@ -1,6 +1,17 @@
 h1 #{@question.title}
 p #{@question.body}
 
-p Answers count: #{@question.answers.count}
+h2 Answers
 
+- if @question.answers.present?
+  table
+    thead
+      tr
+        th Body
+    tbody
+      = render @question.answers
+- else
+  p No answers yet
+
+h2 Create new answer
 = render 'answers/form'
