@@ -1,1 +1,6 @@
-- @question.inspect
+h1 #{@question.title}
+p #{@question.body}
+
+p Answers count: #{@question.answers.count}
+
+= render 'answers/form'

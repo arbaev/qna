@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :question, only: %w[show]
+  before_action :question, only: %i[show]
 
   def index
     @questions = Question.all
@@ -19,8 +19,7 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def show
-  end
+  def show; end
 
   private
 
