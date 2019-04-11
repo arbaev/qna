@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, author_id: user.id) }
+  let(:answer) { create(:answer, author_id: user.id) }
 
   describe 'GET #new' do
     before { login(user) }
