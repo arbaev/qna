@@ -15,22 +15,4 @@ feature 'user can view the question', %q{
     expect(page).to have_content("#{question.title}")
     expect(page).to have_content("#{question.body}")
   end
-
-  scenario 'view the answers to the question' do
-    answers.each do |answer|
-      expect(page).to have_content answer.body
-    end
-  end
-
-  scenario 'create a new answer to the question' do
-    fill_in 'Body', with: answers.first.body
-    click_on 'Create answer'
-    expect(page).to have_content('answer successfully created')
-  end
-
-  scenario 'create empty answer' do
-    fill_in 'Body', with: nil
-    click_on 'Create answer'
-    expect(page).to have_content("please, enter answer's text")
-  end
 end

@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, only: %i[new create]
   before_action :question, only: %i[new create]
 
   def new
