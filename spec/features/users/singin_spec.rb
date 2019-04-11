@@ -11,7 +11,7 @@ feature 'User can sign in', %q{
   background { visit new_user_session_path }
 
   scenario 'Registered user tries to sign in' do
-    login_as(user)
+    sign_in(user)
 
     expect(page).to have_content 'Signed in successfully.'
   end
@@ -33,7 +33,7 @@ feature 'User can sign out', %q{
   given(:user) { create(:user) }
 
   scenario 'Registered user tries to sign out' do
-    login_as(user)
+    sign_in(user)
     click_on 'Logout'
 
     expect(page).to have_content 'Signed out successfully.'
@@ -56,13 +56,4 @@ feature 'User can sign up', %q{
 
     expect(page).to have_content 'Welcome! You have signed up successfully.'
   end
-end
-
-private
-
-def login_as(user)
-  visit new_user_session_path
-  fill_in 'Email', with: user.email
-  fill_in 'Password', with: user.password
-  click_on 'Log in'
 end

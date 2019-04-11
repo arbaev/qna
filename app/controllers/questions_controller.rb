@@ -1,4 +1,5 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, only: %i[new create]
   before_action :question, only: %i[show]
 
   def index
