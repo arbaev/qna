@@ -1,9 +1,6 @@
 = link_to 'Ask question', new_question_path
 
-table
-  thead
-    tr
-      th Title
-      th Body
-  tbody
-    = render partial: 'questions/question', collection: @questions
+h1 Questions list
+
+ul.content-list
+  = render partial: 'questions/question', collection: @questions
