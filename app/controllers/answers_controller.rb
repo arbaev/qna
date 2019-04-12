@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create]
+  before_action :authenticate_user!, only: %i[new create destroy]
+  before_action :answer, only: %i[destroy]
   before_action :question, only: %i[new create]
 
   def new
@@ -17,10 +18,19 @@ class AnswersController < ApplicationController
     end
   end
 
+  def destroy
+    @answer.destroy
+    redirect_to question_path(@answer.question), notice: 'answer successfully deleted'
+  end
+
   private
 
   def question
     @question ||= Question.find(params[:question_id])
+  end
+
+  def answer
+    @answer ||= Answer.find(params[:id])
   end
 
   def answer_params
