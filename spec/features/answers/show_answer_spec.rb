@@ -4,8 +4,9 @@ feature 'guest can view answers to the question', %q{
   user can be unauthenticate
 } do
 
-  given!(:question) { create(:question, id: 9999) }
-  given!(:answers) { create_list(:answers_list, 3, question: question) }
+  given(:user) { create(:user) }
+  given!(:question) { create(:question, id: 9999, author_id: user.id) }
+  given!(:answers) { create_list(:answers_list, 3, question: question, author_id: user.id) }
 
   background { visit question_path(question) }
 

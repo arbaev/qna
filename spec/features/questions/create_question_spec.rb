@@ -5,8 +5,8 @@ feature 'user can create question', %q{
   show question page
 } do
 
-  given(:question) { create(:question) }
   given(:user) { create(:user) }
+  given(:question) { create(:question, author_id: user.id) }
 
   describe 'Authenticated user' do
     background do

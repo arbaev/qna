@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create]
-  before_action :question, only: %i[show]
+  before_action :authenticate_user!, only: %i[new create destroy]
+  before_action :question, only: %i[show destroy]
 
   def index
     @questions = Question.all
@@ -23,6 +23,11 @@ class QuestionsController < ApplicationController
   end
 
   def show; end
+
+  def destroy
+    @question.destroy
+    redirect_to questions_path, notice: 'question successfully deleted'
+  end
 
   private
 

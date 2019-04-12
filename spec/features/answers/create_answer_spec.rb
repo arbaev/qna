@@ -5,9 +5,9 @@ feature 'user can create answer to the question', %q{
   create a new answer to the question
 } do
 
-  given!(:question) { create(:question, id: 9999) }
-  given!(:answers) { create_list(:answers_list, 3, question: question) }
   given(:user) { create(:user) }
+  given!(:question) { create(:question, id: 9999, author_id: user.id) }
+  given!(:answers) { create_list(:answers_list, 3, question: question, author_id: user.id) }
 
   describe 'Authenticated user' do
     background do
