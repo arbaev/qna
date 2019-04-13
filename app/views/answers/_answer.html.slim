@@ -1,6 +1,6 @@
 li.answer-list__item
   span.answer__attrs> Author: <strong>#{answer.author.email}</strong>
-  - if current_user.author_of?(answer)
+  - if current_user&.author_of?(answer)
     = link_to 'delete answer', answer_path(answer),
             method: :delete,
             data: {confirm: 'Are you sure?'}
