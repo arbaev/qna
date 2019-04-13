@@ -5,20 +5,6 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question, author_id: user.id) }
   let(:answer) { create(:answer, question: question, author_id: user.id) }
 
-  describe 'GET #new' do
-    before { login(user) }
-
-    before { get :new, params: { question_id: question } }
-
-    it 'assigns a new Answer to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'renders new view' do
-      expect(response).to render_template :new
-    end
-  end
-
   describe 'POST #create' do
     before { login(user) }
 
@@ -27,7 +13,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(question.answers, :count).by(1)
       end
 
-      it 'redirects to show view' do
+      it 'create answer and render question show view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }
         expect(response).to redirect_to assigns(:question)
       end
@@ -40,7 +26,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 're-renders question show view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }
-        expect(response).to redirect_to assigns(:question)
+        expect(response).to render_template 'questions/show'
       end
     end
   end

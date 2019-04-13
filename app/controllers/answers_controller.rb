@@ -1,11 +1,7 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create destroy]
+  before_action :authenticate_user!
   before_action :answer, only: %i[destroy]
-  before_action :question, only: %i[new create]
-
-  def new
-    @answer = @question.answers.new
-  end
+  before_action :question, only: %i[create]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -14,7 +10,9 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @question, notice: 'answer successfully created'
     else
-      redirect_to @question, alert: "please, enter answer's text"
+      @question.answers.destroy(@answer) # delete invalid nil answer
+      flash.now[:alert] = "please, enter answer's text"
+      render 'questions/show'
     end
   end
 
