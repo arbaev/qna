@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
-  let(:question) { create(:question, author_id: user.id) }
-  let(:answer) { create(:answer, question: question, author_id: user.id) }
+  let(:question) { create(:question, author: user) }
+  let(:answer) { create(:answer, question: question, author: user) }
 
   describe 'POST #create' do
     before { login(user) }
@@ -35,7 +35,7 @@ RSpec.describe AnswersController, type: :controller do
     before { login(user) }
 
     context 'Author delete answer' do
-      let!(:answer) { create(:answer, question: question, author_id: user.id) }
+      let!(:answer) { create(:answer, question: question, author: user) }
 
       it 'deletes the answer' do
         expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
@@ -49,7 +49,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'Non-author delete answer' do
       let(:user2) { create(:user) }
-      let!(:answer) { create(:answer, question: question, author_id: user2.id) }
+      let!(:answer) { create(:answer, question: question, author: user2) }
 
       it 'answer does not deleted' do
         expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)

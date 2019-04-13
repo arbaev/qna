@@ -6,9 +6,9 @@ feature 'user can delete his question', %q{
 } do
 
   given(:user1) { create(:user) }
-  given(:question_user1) { create(:question, author_id: user1.id) }
+  given(:question_user1) { create(:question, author: user1) }
   given(:user2) { create(:user) }
-  given(:question_user2) { create(:question, author_id: user2.id) }
+  given(:question_user2) { create(:question, author: user2) }
 
   describe 'Authenticated user' do
     background do

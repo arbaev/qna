@@ -6,7 +6,7 @@ feature 'user can list questions', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:questions) { create_list(:questions_list, 3, author_id: user.id) }
+  given!(:questions) { create_list(:questions_list, 3, author: user) }
 
   scenario 'user get list of all questions' do
     visit questions_path

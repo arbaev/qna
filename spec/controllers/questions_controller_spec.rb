@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question, author_id: user.id) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, author: user) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 3, author_id: user.id) }
+    let(:questions) { create_list(:question, 3, author: user) }
 
     before { get :index }
 
@@ -73,7 +73,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     context 'Author delete question' do
-      let!(:question) { create(:question, author_id: user.id) }
+      let!(:question) { create(:question, author: user) }
 
       it 'deletes the question' do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
@@ -87,7 +87,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'Non-author delete question' do
       let(:user2) { create(:user) }
-      let!(:question) { create(:question, author_id: user2.id) }
+      let!(:question) { create(:question, author: user2) }
 
       it 'deletes the question' do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)

@@ -6,10 +6,10 @@ feature 'user can delete his answer', %q{
 } do
 
   given(:user1) { create(:user) }
-  given(:question_user1) { create(:question, author_id: user1.id) }
-  given!(:answer_user1) { create(:answer, question: question_user1, author_id: user1.id) }
+  given(:question_user1) { create(:question, author: user1) }
+  given!(:answer_user1) { create(:answer, question: question_user1, author: user1) }
   given(:user2) { create(:user) }
-  given!(:answer_user2) { create(:answer, question: question_user1, author_id: user2.id) }
+  given!(:answer_user2) { create(:answer, question: question_user1, author: user2) }
 
   describe 'Authenticated user' do
     background do
