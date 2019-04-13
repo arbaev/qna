@@ -25,8 +25,13 @@ class QuestionsController < ApplicationController
   def show; end
 
   def destroy
-    @question.destroy
-    redirect_to questions_path, notice: 'question successfully deleted'
+    if current_user.author_of?(@question)
+      @question.destroy
+      redirect_to questions_path, notice: 'question successfully deleted'
+    else
+      flash.now[:alert] = 'only author can delete question'
+      render :show
+    end
   end
 
   private

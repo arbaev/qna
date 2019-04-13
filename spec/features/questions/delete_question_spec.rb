@@ -30,7 +30,7 @@ feature 'user can delete his question', %q{
     end
   end
 
-  scenario 'Unauthenticated user tries to delete his question' do
+  scenario 'Unauthenticated user tries to delete question' do
     visit question_path(question_user1)
 
     expect(page).not_to have_link('delete')
