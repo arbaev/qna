@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create destroy]
-  before_action :question, only: %i[show destroy]
+  before_action :set_question, only: %i[show destroy]
 
   def index
     @questions = Question.all
@@ -35,7 +35,7 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body)
   end
 
-  def question
+  def set_question
     @question = Question.find(params[:id])
   end
 end
