@@ -1,7 +1,7 @@
 span.question_attrs
   'Question author:
   em> #{@question.author.email}
-  - if @question.author == current_user
+  - if current_user.author_of?(@question)
     ' Question actions:
     = link_to 'delete', question_path(@question),
                         method: :delete,
