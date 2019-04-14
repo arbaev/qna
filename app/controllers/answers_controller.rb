@@ -10,7 +10,6 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @question, notice: 'answer successfully created'
     else
-      @question.answers.destroy(@answer) # delete invalid nil answer
       flash.now[:alert] = "please, enter answer's text"
       render 'questions/show'
     end

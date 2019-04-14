@@ -8,7 +8,6 @@ feature 'user can view the question', %q{
 
   given(:user) { create(:user) }
   given!(:question) { create(:question, author: user) }
-  given!(:answers) { create_list(:answers_list, 3, question: question, author: user) }
 
   background { visit question_path(question) }
 
