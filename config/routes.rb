@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :questions, shallow: true do
-    resources :answers
+  devise_for :users
+  root to: "questions#index"
+
+  resources :questions, shallow: true, except: %i[edit update] do
+    resources :answers, only: %i[new create destroy]
   end
 end
