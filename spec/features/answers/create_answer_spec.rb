@@ -18,13 +18,14 @@ feature 'user can create answer to the question', %q{
     scenario 'create a new answer to the question' do
       fill_in 'Body', with: answers.first.body
       click_on 'Create answer'
-      expect(page).to have_content('answer successfully created')
+      expect(page).to have_content 'answer successfully created'
+      expect(page).to have_content answers.first.body
     end
 
     scenario 'create empty answer' do
       fill_in 'Body', with: nil
       click_on 'Create answer'
-      expect(page).to have_content("please, enter answer's text")
+      expect(page).to have_content "please, enter answer's text"
     end
   end
 

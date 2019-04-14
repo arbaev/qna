@@ -28,13 +28,13 @@ feature 'user can delete his answer', %q{
     scenario 'user tries to delete someone else answer' do
       element = first('li', text: user2.email)
 
-      expect(element).not_to have_link('delete answer')
+      expect(element).not_to have_link 'delete answer'
     end
   end
 
   scenario 'Unauthenticated user tries to delete his question' do
     visit question_path(question_user1)
 
-    expect(page).not_to have_link('delete answer')
+    expect(page).not_to have_link 'delete answer'
   end
 end

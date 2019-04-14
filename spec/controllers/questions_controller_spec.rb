@@ -42,7 +42,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'new question belongs to the logged user' do
         post :create, params: { question: attributes_for(:question) }
 
-        expect(Question.last.author).to eq user
+        expect(assigns(:question).author).to eq user
       end
 
       it 'redirects to show view' do

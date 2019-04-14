@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :answer do
     body { Faker::Movies::Lebowski.quote }
-    question { nil }
+    question
 
     trait :invalid do
       body { nil }

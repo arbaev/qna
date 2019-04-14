@@ -16,7 +16,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'new answer belongs to the logged user' do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }
 
-        expect(Answer.last.author).to eq user
+        expect(assigns(:answer).author).to eq user
       end
 
       it 'create answer and render question show view' do
