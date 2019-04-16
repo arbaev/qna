@@ -8,9 +8,9 @@ class AnswersController < ApplicationController
     @answer.author = current_user
 
     if @answer.save
-      flash[:notice] = 'answer successfully created'
+      flash.now[:notice] = 'answer successfully created'
     else
-      flash[:alert] = "please, enter answer's text"
+      flash.now[:alert] = 'please, enter text of answer'
     end
   end
 

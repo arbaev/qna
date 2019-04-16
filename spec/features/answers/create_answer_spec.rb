@@ -21,7 +21,7 @@ feature 'user can create answer to the question', %q{
 
       expect(current_path).to eq question_path(question)
       expect(page).to have_content 'answer successfully created'
-      within '.answers' do # чтобы убедиться, что ответ в списке, а не в форме
+      within '.answers-list' do # чтобы убедиться, что ответ в списке, а не в форме
         expect(page).to have_content text
       end
     end
@@ -29,7 +29,7 @@ feature 'user can create answer to the question', %q{
     scenario 'create empty answer' do
       click_on 'Create answer'
 
-      expect(page).to have_content "please, enter answer's text"
+      expect(page).to have_content "please, enter text of answer"
       expect(page).to have_content "Body can't be blank"
     end
   end
