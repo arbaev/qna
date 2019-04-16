@@ -1,7 +1,8 @@
-= render 'shared/errors', resource: @answer
+#answer-errors
+  = render 'shared/errors', resource: @answer
+#answer-form
+  = form_with model: [@question, Answer.new], local: true do |f|
+    = f.label :body
+    = f.text_field :body
 
-= form_with model: [@question, Answer.new], local: true do |f|
-  = f.label :body
-  = f.text_field :body
-
-  = f.submit 'Create answer'
+    = f.submit 'Create answer'

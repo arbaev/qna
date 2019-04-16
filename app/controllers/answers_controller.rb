@@ -8,10 +8,9 @@ class AnswersController < ApplicationController
     @answer.author = current_user
 
     if @answer.save
-      redirect_to @question, notice: 'answer successfully created'
+      flash[:notice] = 'answer successfully created'
     else
-      flash.now[:alert] = "please, enter answer's text"
-      render 'questions/show'
+      flash[:alert] = "please, enter answer's text"
     end
   end
 
