@@ -13,7 +13,7 @@ hr
 h2 Answers
 ul.answers-list
   - if @question.answers.present?
-    = render partial: 'answers/answer', collection: @question.answers
+    = render @question.answers
   - else
     li No answers yet
 

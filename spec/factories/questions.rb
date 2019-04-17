@@ -1,7 +1,8 @@
 FactoryBot.define do
   factory :question do
-    title { "MyString" }
-    body { "MyText" }
+    title { "#{Faker::Coffee.blend_name} question" }
+    body { "Coffe from #{Faker::Coffee.origin}. What does it tase like?" }
+    author { :user }
 
     trait :invalid do
       title { nil }

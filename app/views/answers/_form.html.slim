@@ -2,7 +2,7 @@
   = render 'shared/errors', resource: @answer
 #answer-form
   = form_with model: [@question, Answer.new] do |f|
-    = f.label :body
+    = f.label :body, 'Your answer'
     = f.text_field :body
 
-    = f.submit 'Create answer'
+    = f.submit

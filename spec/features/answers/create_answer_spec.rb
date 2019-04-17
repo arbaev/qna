@@ -16,8 +16,8 @@ feature 'user can create answer to the question', %q{
 
     scenario 'create a new answer to the question' do
       text = Faker::Number.hexadecimal(10)
-      fill_in 'Body', with: text
-      click_on 'Create answer'
+      fill_in 'Your answer', with: text
+      click_on 'Create Answer'
 
       expect(current_path).to eq question_path(question)
       expect(page).to have_content 'answer successfully created'
@@ -27,7 +27,7 @@ feature 'user can create answer to the question', %q{
     end
 
     scenario 'create empty answer' do
-      click_on 'Create answer'
+      click_on 'Create Answer'
 
       expect(page).to have_content "please, enter text of answer"
       expect(page).to have_content "Body can't be blank"
@@ -36,8 +36,8 @@ feature 'user can create answer to the question', %q{
 
   scenario 'unAuth user cannot create answer' do
     visit question_path(question)
-    fill_in 'Body', with: 'just sample text'
-    click_on 'Create answer'
+    fill_in 'Your answer', with: 'just sample text'
+    click_on 'Create Answer'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
