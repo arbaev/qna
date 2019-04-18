@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create destroy]
-  before_action :set_question, only: %i[show destroy]
+  before_action :authenticate_user!, only: %i[new create update destroy]
+  before_action :set_question, only: %i[show update destroy]
 
   def index
     @questions = Question.all
@@ -19,6 +19,14 @@ class QuestionsController < ApplicationController
     else
       flash.now[:alert] = 'please, enter valid data'
       render :new
+    end
+  end
+
+  def update
+    if @question.update(question_params)
+      flash.now[:notice] = 'question successfully edited'
+    else
+      flash.now[:alert] = 'question editing failed'
     end
   end
 

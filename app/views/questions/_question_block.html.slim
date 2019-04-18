@@ -1,0 +1,23 @@
+h1.question__title = @question.title
+span.question_attrs
+  'Question author:
+  em> #{@question.author.email}
+  - if current_user&.author_of?(@question)
+    ' Question actions:
+    =>link_to 'Edit', '#', class: 'edit-question-link'
+    = link_to 'delete', question_path(@question),
+            method: :delete,
+            data: {confirm: 'Are you sure?'}
+
+p.question__body = @question.body
+
+= form_with model: @question, class: 'hide', html: {id: "edit-question-form"} do |f|
+  #question-errors
+    = render 'shared/errors', resource: @question
+  = f.label :title
+  = f.text_field :title
+  br
+  = f.label :body
+  = f.text_area :body
+  br
+  = f.submit

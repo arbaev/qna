@@ -23,9 +23,8 @@ feature 'User can edit his answer', %q{
     end
 
     scenario 'edits his answer' do
-      click_on 'Edit'
-
       within '.answers-list' do
+        click_on 'Edit'
         text = Faker::Number.hexadecimal(10)
         fill_in 'Your answer', with: text
         click_on 'Update Answer'
