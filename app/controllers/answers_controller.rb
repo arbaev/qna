@@ -15,7 +15,11 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update(answer_params)
+    if @answer.update(answer_params)
+      flash.now[:notice] = 'answer successfully edited'
+    else
+      flash.now[:alert] = 'editing answer failed'
+    end
   end
 
   def destroy
