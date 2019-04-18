@@ -1,15 +1,22 @@
 - if answer.persisted?
-  = content_tag :li, class: 'answer-list__item', data: { 'answer-id': answer.id }
-    span.answer__attrs> Author: <strong>#{answer.author.email}</strong>
-    - if current_user&.author_of?(answer)
-      =>link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-      = link_to 'delete answer', answer_path(answer),
-              method: :delete,
-              data: {confirm: 'Are you sure?'}
-      = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
-        = f.label :body, 'Your answer'
-        = f.text_field :body
+  = content_tag :li, class: 'card answer-list__item', data: {'answer-id': answer.id}
+    .card-body
+      h5.card-title = answer.body
+      h6.card-subtitle.mb-2.text-muted.answer__attrs>
+        'Author: <strong>#{answer.author.email}</strong> at #{answer.updated_at}
 
-        = f.submit
-    p = answer.body
-
+      - if current_user&.author_of?(answer)
+        'Actions:
+        =>link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+        = link_to 'Delete', answer_path(answer),
+                method: :delete,
+                data: {confirm: 'Are you sure?'}
+        = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
+          .form-group.row
+            = f.label :body, class: 'col-sm-2 col-form-label'
+              'Your answer
+            .col-sm-10
+              = f.text_area :body, class: 'form-control'
+          .form-group.row
+            .col
+              = f.submit class: 'btn btn-primary float-right'

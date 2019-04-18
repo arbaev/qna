@@ -19,7 +19,7 @@ feature 'user can delete his answer', %q{
 
     scenario 'user tries to delete his answer' do
       element = first('li', text: user1.email)
-      within(element) { click_on 'delete answer' }
+      within(element) { click_on 'Delete' }
 
       expect(page).to have_content 'answer successfully deleted'
       expect(page).to_not have_content answer_user1.body
