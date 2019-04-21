@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :answer do
-    body { Faker::Movies::Lebowski.quote }
+    body { Faker::Number.hexadecimal(10) }
     question
 
     trait :invalid do
@@ -8,7 +8,7 @@ FactoryBot.define do
     end
 
     factory :answers_list do
-      sequence(:body) { |n| "Answer Body #{n}" }
+      sequence(:body) { |n| "Answer Body #{n} #{Faker::Number.hexadecimal(4)}" }
     end
   end
 end

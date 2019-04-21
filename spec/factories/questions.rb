@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :question do
-    title { "#{Faker::Coffee.blend_name} question" }
-    body { "Coffe from #{Faker::Coffee.origin}. What does it tase like?" }
+    title { "#{Faker::Number.hexadecimal(4)} question" }
+    body { "#{Faker::Number.hexadecimal(10)}. What about it?" }
     author { :user }
 
     trait :invalid do
@@ -9,8 +9,8 @@ FactoryBot.define do
     end
 
     factory :questions_list do
-      sequence(:title) { |n| "Question Title #{n}" }
-      sequence(:body) { |n| "Question Body #{n}" }
+      sequence(:title) { |n| "Question Title #{n} #{Faker::Number.hexadecimal(2)}" }
+      sequence(:body) { |n| "Question Body #{n} #{Faker::Number.hexadecimal(4)}" }
     end
   end
 end
