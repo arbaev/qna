@@ -4,7 +4,7 @@ hr
 h2 Answers
 ul.answers-list
   - if @question.answers.present?
-    = render @question.answers
+    = render @question.answers.sort_by(&:best_answer_first)
   - else
     li No answers yet
 

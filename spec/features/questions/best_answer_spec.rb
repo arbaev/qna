@@ -8,8 +8,7 @@ feature 'User can select best answer', %q{
 
   given!(:user) { create(:user) }
   given!(:question) { create(:question, author: user) }
-  given!(:answer) { create(:answer, question: question, author: user) }
-  given!(:answers) { create_list(:answers_list, 3, question: question, author: user) }
+  given!(:answers) { create_list(:answers_list, 5, question: question, author: user) }
   given!(:user2) { create(:user) }
   given!(:question2) { create(:question, author: user2) }
   given!(:answers2) { create_list(:answers_list, 3, question: question2, author: user) }
@@ -21,34 +20,41 @@ feature 'User can select best answer', %q{
     end
 
     scenario 'select best answer' do
+      answer = answers.sample
       within "li[data-answer-id='#{answer.id}']" do
         click_on 'Select as best answer'
-        expect(first(:xpath, './/..')).to have_css('.best-answer')
+        expect(first(:xpath, './/..')).to have_css '.best-answer'
       end
+      expect(page).to have_css '.best-answer', count: 1
 
-      expect(page).to have_css('.best-answer', count: 1)
+      #FIXME: глупо, но rspec не может найти css класс в найденном элементе
+      first_li = first '.answer-list__item'
+      best_answer_li = first '.best-answer'
+      expect(first_li).to eq best_answer_li
     end
 
     scenario 'unselect best answer' do
+      answer = answers.sample
       within "li[data-answer-id='#{answer.id}']" do
         click_on 'Select as best answer'
         click_on 'Select as best answer'
       end
 
-      expect(page).to_not have_css('.best-answer')
+      expect(page).to_not have_css '.best-answer'
     end
 
     scenario 'select another best answer' do
+      answer = answers.sample
       within "li[data-answer-id='#{answer.id}']" do
         click_on 'Select as best answer'
-        expect(first(:xpath, './/..')).to have_css('.best-answer')
+        expect(first(:xpath, './/..')).to have_css '.best-answer'
       end
 
       another_answer = answers.sample
 
       within "li[data-answer-id='#{another_answer.id}']" do
         click_on 'Select as best answer'
-        expect(first(:xpath, './/..')).to have_css('.best-answer')
+        expect(first(:xpath, './/..')).to have_css '.best-answer'
       end
 
       expect(page).to have_css('.best-answer', count: 1)
@@ -57,16 +63,15 @@ feature 'User can select best answer', %q{
     scenario "tries to select best answer for other user's question" do
       visit question_path(question2)
 
-      expect(page).to_not have_selector(:link_or_button, 'Select as best answer')
+      expect(page).to_not have_selector :link_or_button, 'Select as best answer'
     end
-
   end
 
   describe 'Unauthenticated user', js: true do
     scenario 'tries to select best answer' do
       visit question_path(question)
 
-      expect(page).to_not have_selector(:link_or_button, 'Select as best answer')
+      expect(page).to_not have_selector :link_or_button, 'Select as best answer'
     end
   end
 end
