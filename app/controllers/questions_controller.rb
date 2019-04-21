@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create update destroy]
-  before_action :set_question, only: %i[show update destroy]
+  before_action :set_question, only: %i[show update destroy best_answer]
 
   def index
     @questions = Question.all
@@ -39,6 +39,15 @@ class QuestionsController < ApplicationController
     else
       flash.now[:alert] = 'only author can delete question'
       render :show
+    end
+  end
+
+  def best_answer
+    @answer = Answer.find(params[:answer_id])
+    if @question.best_answer_id == @answer.id
+      @question.update(best_answer_id: nil)
+    else
+      @question.update(best_answer_id: @answer.id)
     end
   end
 

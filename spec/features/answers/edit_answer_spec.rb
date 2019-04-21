@@ -33,7 +33,7 @@ feature 'User can edit his answer', %q{
 
         expect(page).to_not have_content answer.body
         expect(page).to have_content text
-        expect(page).to_not have_selector 'input'
+        expect(page).to_not have_selector "form#edit-answer-#{answer.id}"
       end
         expect(page).to have_content 'answer successfully edited'
     end
