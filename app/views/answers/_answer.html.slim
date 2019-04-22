@@ -9,8 +9,8 @@
                         type: "button",
                         remote: true,
                         'aria-pressed': "false",
-                        params: { question: @question },
-                        data: { toggle: "button", answer_id: answer.id }}
+                        params: { question: @question }}
+
       h6.card-subtitle.mb-2.text-muted.answer__attrs>
         'Author: <strong>#{answer.author.email}</strong> at #{answer.updated_at}
 
@@ -22,6 +22,8 @@
                 data: {confirm: 'Are you sure?'},
                 remote: true
         = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
+          .edit-answer-errors
+            = render 'shared/errors', resource: @answer
           .form-group.row
             = f.label :body, class: 'col-sm-2 col-form-label'
               'Your answer

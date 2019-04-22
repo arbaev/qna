@@ -1,4 +1,2 @@
 $('#flash').html('<%= render 'shared/flash' %>');
-$('.answer-list__item[data-answer-id=<%= @answer.id %>]').bind('ajax:success', function() {
-    $(this).fadeOut();
-});
+$('.answer-list__item[data-answer-id=<%= @answer.id %>]').fadeOut();

@@ -11,6 +11,6 @@ class Answer < ApplicationRecord
   end
 
   def best_answer_first
-    best ? 0 : updated_at.to_i
+    best ? 0 : created_at.to_i
   end
 end
