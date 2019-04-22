@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :answer do
     body { Faker::Number.hexadecimal(10) }
-    question
-    author { association :user }
+    association :question
+    association :author, factory: :user
 
     trait :invalid do
       body { nil }

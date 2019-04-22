@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'User can select best answer', %q{
   for his question user can select one best answer,
   change the mind and select another answer at any time,
-  ans best answer will show at first position
+  and best answer will be shown at first position
 } do
 
   given!(:user) { create(:user) }
@@ -11,6 +11,7 @@ feature 'User can select best answer', %q{
   given!(:answers) { create_list(:answers_list, 5, question: question, author: user) }
   given!(:user2) { create(:user) }
   given!(:question2) { create(:question, author: user2) }
+  # answers2 is for seed answer data for question2
   given!(:answers2) { create_list(:answers_list, 3, question: question2, author: user) }
 
   describe 'Authenticated user', js: true do
@@ -19,17 +20,20 @@ feature 'User can select best answer', %q{
       visit question_path(question)
     end
 
-    scenario 'select best answer' do
+    scenario 'select best answer and it shown first' do
       answer = answers.sample
       within "li[data-answer-id='#{answer.id}']" do
         click_on 'Select as best answer'
+
         expect(first(:xpath, './/..')).to have_css '.best-answer'
       end
+
       expect(page).to have_css '.best-answer', count: 1
 
-      #FIXME: глупо, но rspec не может найти css класс в найденном элементе
+      # FIXME: глупо, но rspec не может найти css класс в найденном элементе
       first_li = first '.answer-list__item'
       best_answer_li = first '.best-answer'
+
       expect(first_li).to eq best_answer_li
     end
 
@@ -43,17 +47,19 @@ feature 'User can select best answer', %q{
       expect(page).to_not have_css '.best-answer'
     end
 
-    scenario 'select another best answer' do
-      answer = answers.sample
+    scenario 'select another best answer and it is only one' do
+      answer = answers[2]
       within "li[data-answer-id='#{answer.id}']" do
         click_on 'Select as best answer'
+
         expect(first(:xpath, './/..')).to have_css '.best-answer'
       end
 
-      another_answer = answers.sample
+      another_answer = answers[3]
 
       within "li[data-answer-id='#{another_answer.id}']" do
         click_on 'Select as best answer'
+
         expect(first(:xpath, './/..')).to have_css '.best-answer'
       end
 

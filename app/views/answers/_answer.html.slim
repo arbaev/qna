@@ -1,15 +1,15 @@
 - if answer.persisted?
-  = content_tag :li, class: "card answer-list__item #{'best-answer' if @question.best_answer_id == answer.id}", data: { 'answer-id': answer.id }
+  = content_tag :li, class: "card answer-list__item #{'best-answer' if answer.best}", data: { 'answer-id': answer.id }
     .card-body
       h5.card-title = answer.body
       - if current_user&.author_of?(@question)
-        = button_to 'Select as best answer', best_answer_question_path(@question),
+        = button_to 'Select as best answer', best_answer_path(answer),
                 { class: "btn btn-outline-primary float-right btn-best-answer",
                         method: :patch,
                         type: "button",
                         remote: true,
                         'aria-pressed': "false",
-                        params: { answer_id: answer.id },
+                        params: { question: @question },
                         data: { toggle: "button", answer_id: answer.id }}
       h6.card-subtitle.mb-2.text-muted.answer__attrs>
         'Author: <strong>#{answer.author.email}</strong> at #{answer.updated_at}

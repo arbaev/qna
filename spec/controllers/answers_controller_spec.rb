@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
+  let(:user2) { create(:user) }
   let(:question) { create(:question, author: user) }
   let(:answer) { create(:answer, question: question, author: user) }
 
@@ -54,16 +55,16 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'Non-author delete answer' do
-      let(:user2) { create(:user) }
-      let!(:answer) { create(:answer, question: question, author: user2) }
+      let!(:answer_user2) { create(:answer, question: question, author: user2) }
 
       it 'answer does not deleted' do
-        expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
+        expect { delete :destroy, params: { id: answer_user2 }, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'return status forbidden #403' do
-        delete :destroy, params: { id: answer }, format: :js
-        expect(response).to have_http_status 403
+      it 'render question show view' do
+        delete :destroy, params: { id: answer_user2 }, format: :js
+
+        expect(response).to render_template 'questions/show'
       end
     end
   end
@@ -108,6 +109,50 @@ RSpec.describe AnswersController, type: :controller do
         answer_user2.reload
 
         expect(answer_user2.body).to_not eq 'new body'
+      end
+    end
+  end
+
+  describe 'PATCH #best' do
+    before { login(user) }
+
+    let!(:answer_user2) { create(:answer, question: question, author: user2) }
+
+    context 'User is an author of answer' do
+      it 'changes best answer attribute' do
+        patch :best, params: { id: answer }, format: :js
+        answer.reload
+
+        expect(answer.best).to be_truthy
+      end
+
+      it 'unselect best answer attribute' do
+        patch :best, params: { id: answer }, format: :js # switch ON
+        patch :best, params: { id: answer }, format: :js # switch OFF
+        answer.reload
+
+        expect(answer.best).to be_falsey
+      end
+
+      it 'renders best view' do
+        patch :best, params: { id: answer }, format: :js
+
+        expect(response).to render_template :best
+      end
+    end
+
+    context 'User is NOT an author of answer' do
+      it 'tries to change best answer attribute' do
+        patch :best, params: { id: answer_user2 }, format: :js
+        answer.reload
+
+        expect(answer_user2.best).to be_falsey
+      end
+
+      it 'renders best view' do
+        patch :best, params: { id: answer_user2 }, format: :js
+
+        expect(response).to render_template :best
       end
     end
   end

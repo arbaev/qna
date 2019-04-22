@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: %i[update destroy]
-  before_action :set_question, only: %i[create update destroy]
+  before_action :set_answer, only: %i[update destroy best]
+  before_action :set_question, only: %i[create update destroy best]
   before_action :authority!, only: %i[update destroy]
 
   def create
@@ -28,6 +28,14 @@ class AnswersController < ApplicationController
     flash.now[:notice] = 'answer successfully deleted'
   end
 
+  def best
+    if current_user.author_of?(@question)
+      @answer.set_best
+    else
+      flash.now[:alert] = 'you must be author of question'
+    end
+  end
+
   private
 
   def set_question
@@ -45,7 +53,7 @@ class AnswersController < ApplicationController
   def authority!
     unless current_user.author_of?(@answer)
       flash.now[:alert] = 'you must be author of answer'
-      head 403
+      render 'questions/show'
     end
   end
 end

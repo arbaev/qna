@@ -38,15 +38,6 @@ class QuestionsController < ApplicationController
     redirect_to questions_path, notice: 'question successfully deleted'
   end
 
-  def best_answer
-    @answer = Answer.find(params[:answer_id])
-    if @question.best_answer_id == @answer.id
-      @question.update(best_answer_id: nil)
-    else
-      @question.update(best_answer_id: @answer.id)
-    end
-  end
-
   private
 
   def question_params

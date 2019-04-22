@@ -4,7 +4,13 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  def set_best
+    status = !self.best
+    question.answers.update_all(best: false)
+    update!(best: status)
+  end
+
   def best_answer_first
-    question.best_answer_id == id ? 0 : updated_at.to_i
+    best ? 0 : updated_at.to_i
   end
 end
