@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_answer, only: %i[update destroy]
   before_action :set_question, only: %i[create update destroy]
+  before_action :authority!, only: %i[update destroy]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -23,12 +24,8 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(@answer)
-      @answer.destroy
-      flash.now[:notice] = 'answer successfully deleted'
-    else
-      flash.now[:alert] = 'only author can delete answer'
-    end
+    @answer.destroy
+    flash.now[:notice] = 'answer successfully deleted'
   end
 
   private
@@ -43,5 +40,12 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body)
+  end
+
+  def authority!
+    unless current_user.author_of?(@answer)
+      flash.now[:alert] = 'you must be author of answer'
+      head 403
+    end
   end
 end

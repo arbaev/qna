@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
+  let(:user2) { create(:user) }
   let(:question) { create(:question, author: user) }
 
   describe 'GET #index' do
@@ -107,6 +108,18 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :update
       end
     end
+
+    context 'when not an author' do
+      let(:user2) { create(:user) }
+      let!(:question_user2) { create(:question, author: user2) }
+
+      it 'does not change' do
+        patch :update, params: { id: question_user2, question: { body: question.body } }, format: :js
+        question_user2.reload
+
+        expect(question_user2.body).to_not eq question.body
+      end
+    end
   end
 
   describe 'GET #show' do
@@ -145,7 +158,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
       end
 
-      it 'redirects to index' do
+      it 'redirects to question show' do
         delete :destroy, params: { id: question }
         expect(response).to render_template :show
       end
@@ -157,8 +170,9 @@ RSpec.describe QuestionsController, type: :controller do
 
     let!(:question) { create(:question, author: user) }
     let!(:answer) { create(:answer, question: question, author: user) }
+    let!(:answer_user2) { create(:answer, question: question, author: user2) }
 
-    context 'with valid attributes' do
+    context 'User is an author of answer' do
       it 'changes best answer attribute to question' do
         patch :best_answer, params: { id: question, answer_id: answer.id }, format: :js
         question.reload
@@ -172,5 +186,21 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :best_answer
       end
     end
+
+    context 'User is NOT an author of answer' do
+      it 'tries to change best answer attribute' do
+        patch :best_answer, params: { id: question, answer_id: answer_user2.id }, format: :js
+        question.reload
+
+        expect(question.best_answer_id).to_not eq answer_user2.id
+      end
+
+      it 'renders best view' do
+        patch :best_answer, params: { id: question, answer_id: answer_user2.id }, format: :js
+
+        expect(response).to render_template :show
+      end
+    end
+
   end
 end

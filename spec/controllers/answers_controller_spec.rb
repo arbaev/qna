@@ -61,9 +61,9 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'render question page' do
+      it 'return status forbidden #403' do
         delete :destroy, params: { id: answer }, format: :js
-        expect(response).to render_template :destroy
+        expect(response).to have_http_status 403
       end
     end
   end
@@ -96,6 +96,18 @@ RSpec.describe AnswersController, type: :controller do
       it 'renders update view' do
         patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
         expect(response).to render_template :update
+      end
+    end
+
+    context 'when not an author' do
+      let(:user2) { create(:user) }
+      let!(:answer_user2) { create(:answer, question: question, author: user2) }
+
+      it 'does not change' do
+        patch :update, params: { id: answer_user2, answer: { body: 'new body' } }, format: :js
+        answer_user2.reload
+
+        expect(answer_user2.body).to_not eq 'new body'
       end
     end
   end
