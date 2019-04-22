@@ -1,0 +1,9 @@
+footer.footer.d-flex.justify-content-center.text-light.bg-dark.mt-5
+  | &copy;&ensp;
+  = current_year
+  | &ensp;
+  = mail_to "tim@arbaev.com", 'Tim Arbaev', class: 'text-light footer_link'
+  | .&ensp;
+  = link_to 'Project at Github', github_url('arbaev', 'qna'), target: "_blank", class: 'text-light footer_link'
+  |  — 
+  = link_to 'Online school Thinknetica', 'http://thinknetica.com/', target: "_blank", class: 'text-light footer_link'

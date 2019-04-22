@@ -1,0 +1,23 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
+  min-height: 100vh; // for sticky footer
+}
+
+label {
+  margin-bottom: 0.1rem;
+}
+
+.hide {
+  display: none;
+}
+
+//bootstrap names for flash messages
+.alert-notice {
+  @extend .alert-primary
+}
+.alert-alert {
+  @extend .alert-danger
+}

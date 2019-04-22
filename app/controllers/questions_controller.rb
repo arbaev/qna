@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create destroy]
-  before_action :set_question, only: %i[show destroy]
+  before_action :authenticate_user!, only: %i[new create update destroy]
+  before_action :set_question, only: %i[show update destroy best_answer]
+  before_action :authority!, only: %i[update destroy best_answer]
 
   def index
     @questions = Question.all
@@ -22,16 +23,19 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update
+    if @question.update(question_params)
+      flash.now[:notice] = 'question successfully edited'
+    else
+      flash.now[:alert] = 'question editing failed'
+    end
+  end
+
   def show; end
 
   def destroy
-    if current_user.author_of?(@question)
-      @question.destroy
-      redirect_to questions_path, notice: 'question successfully deleted'
-    else
-      flash.now[:alert] = 'only author can delete question'
-      render :show
-    end
+    @question.destroy
+    redirect_to questions_path, notice: 'question successfully deleted'
   end
 
   private
@@ -42,5 +46,12 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
+  end
+
+  def authority!
+    unless current_user.author_of?(@question)
+      flash.now[:alert] = 'you must be author of question'
+      render :show
+    end
   end
 end
