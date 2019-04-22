@@ -4,13 +4,13 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
-  def set_best
-    status = !self.best
-    question.answers.update_all(best: false)
-    update!(best: status)
-  end
+  scope :best_first, -> { order(best: :desc, created_at: :asc) }
 
-  def best_answer_first
-    best ? 0 : created_at.to_i
+  def set_best!
+    Answer.transaction do
+      status = !best
+      question.answers.each { |a| a.update!(best: false) }
+      update!(best: status)
+    end
   end
 end

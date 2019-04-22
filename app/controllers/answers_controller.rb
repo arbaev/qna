@@ -30,7 +30,7 @@ class AnswersController < ApplicationController
 
   def best
     if current_user.author_of?(@question)
-      @answer.set_best
+      @answer.set_best!
     else
       flash.now[:alert] = 'you must be author of question'
     end
