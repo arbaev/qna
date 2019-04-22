@@ -9,7 +9,7 @@ class Answer < ApplicationRecord
   def set_best!
     Answer.transaction do
       status = !best
-      question.answers.each { |a| a.update!(best: false) }
+      question.answers.update_all(best: false)
       update!(best: status)
     end
   end
