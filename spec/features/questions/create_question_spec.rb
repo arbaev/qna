@@ -16,8 +16,8 @@ feature 'user can create question', %q{
     end
 
     scenario 'user create question with correct data' do
-      fill_in 'Title', with: question.title
-      fill_in 'Body', with: question.body
+      fill_in 'Your question', with: question.title
+      fill_in 'Description of the question', with: question.body
       click_on 'Create Question'
 
       expect(page).to have_content 'question successfully created'
@@ -29,6 +29,16 @@ feature 'user can create question', %q{
       click_on 'Create Question'
 
       expect(page).to have_content 'please, enter valid data'
+    end
+
+    scenario 'user create question with attachment' do
+      fill_in 'Your question', with: question.title
+      fill_in 'Description of the question', with: question.body
+      attach_file 'Attach file', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Create Question'
+
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
     end
   end
 
