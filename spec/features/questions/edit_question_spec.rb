@@ -19,8 +19,8 @@ feature 'user can edit his question', %q{
     scenario 'edit question' do
       new_title = Faker::Number.hexadecimal(10)
       new_body = Faker::Number.hexadecimal(15)
-      fill_in 'Title', with: new_title
-      fill_in 'Body', with: new_body
+      fill_in 'Your question', with: new_title
+      fill_in 'Description of the question', with: new_body
       click_on 'Update Question'
 
       expect(page).to have_content new_title
@@ -28,9 +28,9 @@ feature 'user can edit his question', %q{
       expect(page).to have_content 'question successfully edited'
     end
 
-    scenario 'edit question with invalid data' do
-      fill_in 'Title', with: ''
-      fill_in 'Body', with: ''
+    scenario 'with invalid data' do
+      fill_in 'Your question', with: ''
+      fill_in 'Description of the question', with: ''
       click_on 'Update Question'
 
       expect(page).to have_content "Title can't be blank"
@@ -38,11 +38,19 @@ feature 'user can edit his question', %q{
       expect(page).to have_content 'question editing failed'
     end
 
-    scenario 'submit question with no changes' do
+    scenario 'with no changes' do
       click_on 'Update Question'
 
       expect(page).to have_content question.title
       expect(page).to have_content question.body
+    end
+
+    scenario 'adding attachment' do
+      attach_file 'Attach file', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Update Question'
+
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
     end
   end
 
