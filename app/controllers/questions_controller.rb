@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create update destroy]
+  before_action :authenticate_user!, only: %i[new create update destroy delete_file]
   before_action :set_question, only: %i[show update destroy best_answer]
   before_action :authority!, only: %i[update destroy best_answer]
 
@@ -36,6 +36,12 @@ class QuestionsController < ApplicationController
   def destroy
     @question.destroy
     redirect_to questions_path, notice: 'question successfully deleted'
+  end
+
+  def delete_file
+    @file = ActiveStorage::Attachment.find(params[:id])
+    @question = @file.record
+    @file.purge
   end
 
   private

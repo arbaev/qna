@@ -8,6 +8,10 @@ FactoryBot.define do
       title { nil }
     end
 
+    # trait :with_file do
+    #   files.attach(io: File.open(Rails.root.join('public', 'apple-touch-icon.png')))
+    # end
+
     factory :questions_list do
       sequence(:title) { |n| "Question Title #{n} #{Faker::Number.hexadecimal(2)}" }
       sequence(:body) { |n| "Question Body #{n} #{Faker::Number.hexadecimal(4)}" }
