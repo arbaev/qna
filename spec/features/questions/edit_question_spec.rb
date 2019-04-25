@@ -46,17 +46,20 @@ feature 'user can edit his question', %q{
     end
 
     scenario 'adding attachment' do
-      attach_file 'Attach file', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
-      click_on 'Update Question'
-
+      within '#edit-question-form' do
+        attach_file 'Attach file', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Update Question'
+      end
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
       expect(page).to have_content 'question successfully edited'
     end
 
     scenario 'deleting attached files' do
-      attach_file 'Attach file', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
-      click_on 'Update Question'
+      within '#edit-question-form' do
+        attach_file 'Attach file', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Update Question'
+      end
 
       within '.attached-files' do
         first("a[data-method='delete']").click
