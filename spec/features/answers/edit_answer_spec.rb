@@ -63,6 +63,23 @@ feature 'User can edit his answer', %q{
       expect(page).to have_content 'answer successfully edited'
     end
 
+    scenario 'deleting attached files' do
+      within (all('.answer-list__item').first) do
+        click_on 'Edit'
+        attach_file 'Attach file', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Update Answer'
+
+        within '.attached-files' do
+          first("a[data-method='delete']").click
+        end
+
+        page.driver.browser.switch_to.alert.accept
+
+        expect(page).to_not have_link 'rails_helper.rb'
+      end
+      expect(page).to have_content 'rails_helper.rb successfully deleted'
+    end
+
     scenario "tries to edit other user's question" do
       within page.find('li', text: user2.email) do
         expect(page).to have_no_link 'Edit'

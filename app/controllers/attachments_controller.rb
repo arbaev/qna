@@ -4,7 +4,6 @@ class AttachmentsController < ApplicationController
   before_action :authority!
 
   def destroy
-    @question = @attachment.record
     @attachment.purge
     flash.now[:notice] = "#{@attachment.filename} successfully deleted"
   end

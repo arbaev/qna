@@ -17,6 +17,11 @@
           - answer.files.each do |file|
             span>
               = link_to file.filename.to_s, url_for(file)
+              = link_to attachment_path(file),
+                      method: :delete,
+                      data: {confirm: 'Are you sure?'},
+                      :remote => true do
+                = octicon("x", :height => 16, :class => "d-inline")
 
       h6.card-subtitle.mb-2.text-muted.answer__attrs>
         'Author: <strong>#{answer.author.email}</strong> at #{answer.updated_at}

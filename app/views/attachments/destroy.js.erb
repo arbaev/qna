@@ -1,6 +1,2 @@
-$('#question-errors').html('<%= render 'shared/errors', resource: @question %>');
 $('#flash').html('<%= render 'shared/flash' %>');
-
-<% unless @question.errors.present? %>
-  $('#question').html('<%= j render 'questions/question_block' %>');
-<% end %>
+$('a[href*="/attachments/<%= @attachment.id %>"]').closest('span').fadeOut();
