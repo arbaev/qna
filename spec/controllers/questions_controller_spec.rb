@@ -164,17 +164,4 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
-
-  # describe 'DELETE attachment' do
-  #   before { login(user) }
-  #
-  #   context 'Author delete attached file' do
-  #     let!(:question) { create(:question, author: user) }
-  #
-  #     it 'deletes the question' do
-  #   file = fixture_file_upload(Rails.root.join('public', 'apple-touch-icon.png'), 'image/png')
-  #       expect { delete :delete_file, params: { id: file.id } }.to change(question.files, :count).by(-1)
-  #     end
-  #   end
-  # end
 end

@@ -8,9 +8,13 @@ FactoryBot.define do
       title { nil }
     end
 
-    # trait :with_file do
-    #   files.attach(io: File.open(Rails.root.join('public', 'apple-touch-icon.png')))
-    # end
+    trait :with_attachment do
+      after :create do |question|
+        file_path = Rails.root.join('public', 'apple-touch-icon.png')
+        file = fixture_file_upload(file_path, 'image/png')
+        question.files.attach(file)
+      end
+    end
 
     factory :questions_list do
       sequence(:title) { |n| "Question Title #{n} #{Faker::Number.hexadecimal(2)}" }

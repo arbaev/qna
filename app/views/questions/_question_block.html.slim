@@ -1,14 +1,14 @@
 h1.question__title = @question.title
 p.question__body = @question.body
 - if @question.files.attached?
-  p
+  p.attached-files
     'Attached files:
     - @question.files.each do |file|
       span>
         = link_to file.filename.to_s, url_for(file)
-        = link_to delete_file_question_path(file),
+        = link_to attachment_path(file),
                 method: :delete,
-                data: {confirm: 'Are you sure?', 'file-id': file.id},
+                data: {confirm: 'Are you sure?'},
                 :remote => true do
           = octicon("x", :height => 16, :class => "d-inline")
 
