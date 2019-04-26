@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create update destroy]
+  before_action :authenticate_user!, only: %i[new create update destroy delete_file]
   before_action :set_question, only: %i[show update destroy best_answer]
   before_action :authority!, only: %i[update destroy best_answer]
 
@@ -41,11 +41,11 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, files: [])
   end
 
   def set_question
-    @question = Question.find(params[:id])
+    @question = Question.with_attached_files.find(params[:id])
   end
 
   def authority!

@@ -19,8 +19,8 @@ feature 'user can edit his question', %q{
     scenario 'edit question' do
       new_title = Faker::Number.hexadecimal(10)
       new_body = Faker::Number.hexadecimal(15)
-      fill_in 'Title', with: new_title
-      fill_in 'Body', with: new_body
+      fill_in 'Your question', with: new_title
+      fill_in 'Description of the question', with: new_body
       click_on 'Update Question'
 
       expect(page).to have_content new_title
@@ -28,9 +28,9 @@ feature 'user can edit his question', %q{
       expect(page).to have_content 'question successfully edited'
     end
 
-    scenario 'edit question with invalid data' do
-      fill_in 'Title', with: ''
-      fill_in 'Body', with: ''
+    scenario 'with invalid data' do
+      fill_in 'Your question', with: ''
+      fill_in 'Description of the question', with: ''
       click_on 'Update Question'
 
       expect(page).to have_content "Title can't be blank"
@@ -38,17 +38,44 @@ feature 'user can edit his question', %q{
       expect(page).to have_content 'question editing failed'
     end
 
-    scenario 'submit question with no changes' do
+    scenario 'with no changes' do
       click_on 'Update Question'
 
       expect(page).to have_content question.title
       expect(page).to have_content question.body
     end
+
+    scenario 'adding attachment' do
+      within '#edit-question-form' do
+        attach_file 'Attach file', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Update Question'
+      end
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
+      expect(page).to have_content 'question successfully edited'
+    end
+
+    scenario 'deleting attached files' do
+      within '#edit-question-form' do
+        attach_file 'Attach file', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Update Question'
+      end
+
+      within '.attached-files' do
+        first("a[data-method='delete']").click
+      end
+      page.driver.browser.switch_to.alert.accept
+
+      expect(page).to_not have_link 'rails_helper.rb'
+      expect(page).to have_content 'rails_helper.rb successfully deleted'
+    end
   end
 
-  scenario 'Unauthenticated user cannot edit a question' do
-    visit question_path(question)
+  describe 'Unauthenticated user', js: true do
+    scenario 'cannot edit a question' do
+      visit question_path(question)
 
-    expect(page).not_to have_link 'Edit'
+      expect(page).not_to have_link 'Edit'
+    end
   end
 end
