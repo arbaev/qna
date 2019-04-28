@@ -32,7 +32,10 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    @answer = Answer.new
+    @answer.links.new
+  end
 
   def destroy
     @question.destroy

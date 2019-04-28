@@ -11,6 +11,12 @@
                         'aria-pressed': "false",
                         params: { question: @question }}
 
+      - if answer.links.present?
+        p.links
+          'Links:
+          - answer.links.each do |link|
+            span>
+              = link_to link.name, link.url
       - if answer.files.attached?
         p.attached-files
           'Attached files:

@@ -20,17 +20,15 @@
 
     p Links:
     = f.fields_for :links do |l|
-      .form-group.row
-        = l.label :name, class: 'col-sm-2 col-form-label'
-          'Link name
-        .col-sm-10
+      .form-row
+        .form-group.col-md-6
+          = l.label :name, class: 'col-form-label'
+            'Link name
           = l.text_field :name, class: 'form-control'
-      .form-group.row
-        = l.label :url, class: 'col-sm-2 col-form-label'
-          'Link URL
-        .col-sm-10
+        .form-group.col-md-6
+          = l.label :url, class: 'col-form-label'
+            'Link URL
           = l.text_field :url, class: 'form-control'
-
     .form-group.row
       .col
         = f.submit class: 'btn btn-primary float-right'
