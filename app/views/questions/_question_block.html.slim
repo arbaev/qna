@@ -1,11 +1,13 @@
 h1.question__title = @question.title
 p.question__body = @question.body
+
 - if @question.links.present?
   p.links
     'Links:
     - @question.links.each do |link|
       span>
         = link_to link.name, link.url
+
 - if @question.files.attached?
   p.attached-files
     'Attached files:
@@ -26,25 +28,5 @@ p.question_attrs.text-muted
     = link_to 'delete', question_path(@question),
               method: :delete,
               data: {confirm: 'Are you sure?'}
-
-  = form_with model: @question, class: 'hide', html: {id: "edit-question-form"} do |f|
-    #question-errors
-      = render 'shared/errors', resource: @question
-    .form-group.row
-      = f.label :title, class: 'col-sm-2 col-form-label'
-        'Your question
-      .col-sm-10
-        = f.text_field :title, class: 'form-control'
-    .form-group.row
-      = f.label :body, class: 'col-sm-2 col-form-label'
-        'Description of the question
-      .col-sm-10
-        = f.text_area :body, class: 'form-control'
-    .form-group.row
-      = f.label :files, class: 'col-sm-2 col-form-label'
-        'Attach files
-      .col-sm-10
-        = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
-    .form-group.row
-      .col
-        = f.submit class: 'btn btn-primary float-right'
+    #edit-question-form.hide
+      = render 'form'
