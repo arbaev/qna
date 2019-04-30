@@ -35,7 +35,6 @@ feature 'User can add links to answer', %q{
         end
 
         click_on 'Create Answer'
-        sleep 2
       end
 
       within '.answers-list' do
@@ -67,7 +66,6 @@ feature 'User can add links to answer', %q{
         end
 
         click_on 'Update Answer'
-        sleep 2
 
         within('.links-list') do
           expect(page).to have_link link1.name, href: link1.url

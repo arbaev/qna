@@ -80,7 +80,6 @@ feature 'User can add links to question', %q{
         end
 
         click_on 'Update Question'
-        sleep 2
 
         within('.links-list') do
           expect(page).to have_link link1.name, href: link1.url
