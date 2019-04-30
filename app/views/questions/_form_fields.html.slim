@@ -15,10 +15,10 @@
     'Attach files
   .col-sm-10
     = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
-#links
+.links
   = f.fields_for :links do |l|
     = render 'shared/link_fields', f: l
-  .links
+  .links-actions
     = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
 
 .form-group.row

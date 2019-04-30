@@ -7,9 +7,9 @@ feature 'User can add links to question', %q{
 } do
 
   given(:user) { create(:user) }
+  given(:question) { create(:question, author: user) }
   given(:link1) { create(:link) }
   given(:link2) { create(:link) }
-  # given(:gist_url) { 'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c' }
 
   describe 'When create question' do
     background do
@@ -29,7 +29,7 @@ feature 'User can add links to question', %q{
       expect(page).to have_link link1.name, href: link1.url
     end
 
-    scenario 'User adds links when create question', js: true do
+    scenario 'User adds some links when create question', js: true do
       fill_in 'Your question', with: 'Test question'
       fill_in 'Description of the question', with: 'text text text'
 
@@ -39,15 +39,57 @@ feature 'User can add links to question', %q{
       click_on 'add link'
 
       new_link_nested_form = all('.nested-fields').last
+
       within(new_link_nested_form) do
         fill_in 'Link name', with: link2.name
         fill_in 'Link URL', with: link2.url
       end
+
       click_on 'Create Question'
+
       within('.links-list') do
         expect(page).to have_link link1.name, href: link1.url
         expect(page).to have_link link2.name, href: link2.url
       end
     end
+  end
+
+  describe 'When edit question', js: true do
+    background do
+      sign_in(user)
+      visit question_path(question)
+      click_on 'Edit'
+    end
+
+    scenario 'user adds some links' do
+      within('#question') do
+        first(:link, 'add link').click
+
+        new_link_nested_form = all('.nested-fields').last
+        within(new_link_nested_form) do
+          fill_in 'Link name', with: link1.name
+          fill_in 'Link URL', with: link1.url
+        end
+
+        first(:link, 'add link').click
+
+        new_link_nested_form = all('.nested-fields').last
+        within(new_link_nested_form) do
+          fill_in 'Link name', with: link2.name
+          fill_in 'Link URL', with: link2.url
+        end
+
+        click_on 'Update Question'
+        sleep 2
+
+        within('.links-list') do
+          expect(page).to have_link link1.name, href: link1.url
+          expect(page).to have_link link2.name, href: link2.url
+        end
+      end
+    end
+
+    scenario 'user deletes one link'
+    scenario 'user deletes all links'
   end
 end
