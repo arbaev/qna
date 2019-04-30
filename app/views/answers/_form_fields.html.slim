@@ -1,24 +1,22 @@
-.question-errors
-  = render 'shared/errors', resource: @question
-.form-group.row
-  = f.label :title, class: 'col-sm-2 col-form-label'
-    'Your question
-  .col-sm-10
-    = f.text_field :title, class: 'form-control'
+.answer-errors
+  = render 'shared/errors', resource: @answer
+
 .form-group.row
   = f.label :body, class: 'col-sm-2 col-form-label'
-    'Description of the question
+    'Your answer
   .col-sm-10
     = f.text_area :body, class: 'form-control'
+
 .form-group.row
   = f.label :files, class: 'col-sm-2 col-form-label'
     'Attach files
   .col-sm-10
     = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
-#links
+
+.links
   = f.fields_for :links do |l|
     = render 'shared/link_fields', f: l
-  .links
+  .links-actions
     = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
 
 .form-group.row
