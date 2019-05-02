@@ -6,7 +6,7 @@ p.question__body = @question.body
     'Links:
     - @question.links.each do |link|
       span>
-        = link_to link.name, link.url
+        = link_and_gist link
 
 - if @question.files.attached?
   p.attached-files

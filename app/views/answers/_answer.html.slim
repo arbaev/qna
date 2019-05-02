@@ -17,7 +17,7 @@
           'Links:
           - answer.links.each do |link|
             span>
-              = link_to link.name, link.url
+              = link_and_gist link
 
       - if answer.files.attached?
         p.attached-files
