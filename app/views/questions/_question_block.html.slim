@@ -15,6 +15,13 @@ p.question__body = @question.body
                 :remote => true do
           = octicon("x", :height => 16, :class => "d-inline")
 
+- if @question.reward.present?
+  p.reward
+    'Reward:
+    span>
+      = @question.reward.name
+      = link_to @question.reward.image.filename.to_s, url_for(@question.reward.image)
+
 p.question_attrs.text-muted
   'Question author: <em>#{@question.author.email}</em>
   - if current_user&.author_of?(@question)

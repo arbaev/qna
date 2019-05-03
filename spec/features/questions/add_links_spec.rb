@@ -40,7 +40,7 @@ feature 'User can add links to question', %q{
 
       click_on 'add link'
 
-      new_link_nested_form = all('.nested-fields').last
+      new_link_nested_form = all('.links > .nested-fields').last
 
       within(new_link_nested_form) do
         fill_in 'Link name', with: link2.name
