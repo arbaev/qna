@@ -25,7 +25,7 @@ feature 'User can add reward to question', %q{
       click_on 'Create Question'
 
       expect(page).to have_content 'reward.name'
-      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_css("img[src*='rails_helper.rb']")
     end
 
     scenario 'tries to add reward with empty name' do
@@ -33,7 +33,7 @@ feature 'User can add reward to question', %q{
 
       click_on 'Create Question'
 
-      expect(page).to_not have_link 'rails_helper.rb'
+      expect(page).to_not have_css("img[src*='rails_helper.rb']")
       expect(page).to have_content "Reward name can't be blank"
       expect(page).to have_content 'please, enter valid data'
     end
@@ -42,7 +42,7 @@ feature 'User can add reward to question', %q{
       fill_in 'Reward name', with: 'reward.name'
       click_on 'Create Question'
 
-      expect(page).to_not have_link 'rails_helper.rb'
+      expect(page).to_not have_css("img[src*='rails_helper.rb']")
       expect(page).to have_content 'Reward image must be added'
       expect(page).to have_content 'please, enter valid data'
     end

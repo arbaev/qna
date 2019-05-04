@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :reward do
-    name { "MyString" }
+    name { Faker::Artist.name }
     association :question
     association :user
 
