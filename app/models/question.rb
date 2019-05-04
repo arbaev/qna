@@ -10,4 +10,8 @@ class Question < ApplicationRecord
   has_many_attached :files
 
   validates :title, :body, presence: true
+
+  def set_reward!(author)
+    reward.update(user: author) if reward
+  end
 end
