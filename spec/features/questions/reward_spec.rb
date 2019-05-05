@@ -8,7 +8,6 @@ feature 'User can add reward to question', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question, author: user) }
-  # given(:reward) { create(:reward, question: question) }
 
   describe 'When create question' do
     background do
@@ -47,20 +46,6 @@ feature 'User can add reward to question', %q{
       expect(page).to have_content 'please, enter valid data'
     end
 
-    scenario 'tries to add invalid file of reward'
-
-  end
-
-  describe 'When edit question', js: true do
-    background do
-      sign_in(user)
-      visit question_path(question)
-      click_on 'Edit'
-    end
-
-    scenario 'author add reward'
-    scenario 'tries to add reward with empty name'
-    scenario 'tries to add reward without file'
     scenario 'tries to add invalid file of reward'
 
   end
