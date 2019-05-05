@@ -22,6 +22,7 @@ feature 'user can create answer to the question', %q{
       expect(current_path).to eq question_path(question)
       expect(page).to have_content 'answer successfully created'
       within '.answers-list' do # чтобы убедиться, что ответ в списке, а не в форме
+        expect(page).to_not have_content 'No answers yet'
         expect(page).to have_content text
       end
     end

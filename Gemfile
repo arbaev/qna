@@ -23,6 +23,8 @@ gem 'devise'
 gem 'jquery-rails'
 gem 'bootstrap', '~> 4.3.1'
 gem 'octicons_helper'
+# Cocoon for nested forms
+gem "cocoon"
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
@@ -39,6 +41,9 @@ gem 'jbuilder', '~> 2.5'
 
 # Amazon S3 support
 gem 'aws-sdk-s3', '~> 1'
+
+# Github API support
+gem "octokit", "~> 4.0"
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -73,6 +78,7 @@ group :test do
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
   gem 'launchy'
+  gem 'database_cleaner'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

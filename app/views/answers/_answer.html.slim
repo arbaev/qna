@@ -2,6 +2,7 @@
   = content_tag :li, class: "card answer-list__item #{'best-answer' if answer.best}", data: { 'answer-id': answer.id }
     .card-body
       h5.card-title = answer.body
+
       - if current_user&.author_of?(@question)
         = button_to 'Select as best answer', best_answer_path(answer),
                 { class: "btn btn-outline-primary float-right btn-best-answer",
@@ -10,6 +11,8 @@
                         remote: true,
                         'aria-pressed': "false",
                         params: { question: @question }}
+
+      = render 'shared/links', resource: answer
 
       - if answer.files.attached?
         p.attached-files
@@ -34,18 +37,4 @@
                 data: {confirm: 'Are you sure?'},
                 remote: true
         = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
-          .edit-answer-errors
-            = render 'shared/errors', resource: @answer
-          .form-group.row
-            = f.label :body, class: 'col-sm-2 col-form-label'
-              'Your answer
-            .col-sm-10
-              = f.text_area :body, class: 'form-control'
-          .form-group.row
-            = f.label :files, class: 'col-sm-2 col-form-label'
-              'Attach files
-            .col-sm-10
-              = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
-          .form-group.row
-            .col
-              = f.submit class: 'btn btn-primary float-right'
+          = render partial: 'answers/form_fields', locals: {f: f}

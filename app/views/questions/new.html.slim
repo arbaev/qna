@@ -1,4 +1,3 @@
-#question-errors
-  = render 'shared/errors', resource: @question
 #question-form
-  = render 'form'
+  = form_with model: @question, local: true do |f|
+    = render partial: 'form_fields', locals: { f: f }
