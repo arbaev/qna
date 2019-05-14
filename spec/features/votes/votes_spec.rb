@@ -8,6 +8,7 @@ feature 'User can vote for favorite question/answer', %q{
 
   given(:user) { create(:user) }
   given!(:question) { create(:question) }
+  given!(:question_user) { create(:question, author: user) }
   given!(:answers) { create_list(:answers_list, 3, question: question, author: user) }
 
   describe 'User vote for question', js: true do
@@ -17,21 +18,32 @@ feature 'User can vote for favorite question/answer', %q{
     end
 
     scenario 'one time up' do
-      first(:xpath, "//a[@title='Vote up!']").click
+      within('#question > .votes') do
+        first(:xpath, "//a[@title='Vote up!']").click
 
-      expect(first('.vote-rating')).to have_content '1'
+        expect(first('.vote-rating')).to have_content '1'
+      end
     end
 
     scenario 'one time down' do
-      first(:xpath, "//a[@title='Vote down!']").click
+      within('#question > .votes') do
+        first(:xpath, "//a[@title='Vote down!']").click
 
-      expect(first('.vote-rating')).to have_content '-1'
+        expect(first('.vote-rating')).to have_content '-1'
+      end
     end
 
     scenario 'tries to vote second time up'
     scenario 'tries to vote second time down'
     scenario 'remove his vote'
-    scenario 'tries to vote his answer'
+
+    scenario 'cannot vote for his question' do
+      visit question_path(question_user)
+
+      within('#question > .votes') do
+        expect(page).to_not have_css '.vote-link'
+      end
+    end
   end
 
   describe 'Non-auth user tries to vote', js: true do
