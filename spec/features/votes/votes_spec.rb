@@ -19,23 +19,111 @@ feature 'User can vote for favorite question/answer', %q{
 
     scenario 'one time up' do
       within('#question > .votes') do
-        first(:xpath, "//a[@title='Vote up!']").click
+        link_vote_up = first(:xpath, "//a[@title='Vote up!']")
+        link_vote_up.click
+        sleep 0.5
 
         expect(first('.vote-rating')).to have_content '1'
+        expect(link_vote_up[:class]).to include 'vote-active'
       end
     end
 
     scenario 'one time down' do
       within('#question > .votes') do
-        first(:xpath, "//a[@title='Vote down!']").click
+        link_vote_down = first(:xpath, "//a[@title='Vote down!']")
+        link_vote_down.click
+        sleep 0.5
 
         expect(first('.vote-rating')).to have_content '-1'
+        expect(link_vote_down[:class]).to include 'vote-active'
       end
     end
 
-    scenario 'tries to vote second time up'
-    scenario 'tries to vote second time down'
-    scenario 'remove his vote'
+    scenario 'tries to vote three times up' do
+      within('#question > .votes') do
+        link_vote_up = first(:xpath, "//a[@title='Vote up!']")
+        link_vote_up.click
+        link_vote_up.click
+        link_vote_up.click
+        sleep 0.5
+
+        expect(first('.vote-rating')).to have_content '1'
+        expect(link_vote_up[:class]).to include 'vote-active'
+      end
+    end
+
+    scenario 'tries to vote three times down' do
+      within('#question > .votes') do
+        link_vote_down = first(:xpath, "//a[@title='Vote down!']")
+        link_vote_down.click
+        link_vote_down.click
+        link_vote_down.click
+        sleep 0.5
+
+        expect(first('.vote-rating')).to have_content '-1'
+        expect(link_vote_down[:class]).to include 'vote-active'
+      end
+    end
+
+    scenario 'remove his vote' do
+      within('#question > .votes') do
+        link_vote_down = first(:xpath, "//a[@title='Vote down!']")
+        link_vote_down.click
+        link_vote_down.click
+        sleep 0.5
+
+        expect(first('.vote-rating')).to have_content '0'
+        expect(link_vote_down[:class]).to_not include 'vote-active'
+      end
+    end
+
+    scenario 'switch vote from up to down' do
+      within('#question > .votes') do
+        link_vote_up = first(:xpath, "//a[@title='Vote up!']")
+        link_vote_down = first(:xpath, "//a[@title='Vote down!']")
+        link_vote_up.click
+        sleep 0.5
+        link_vote_down.click
+        sleep 0.5
+
+        expect(first('.vote-rating')).to have_content '-1'
+        expect(link_vote_up[:class]).to_not include 'vote-active'
+        expect(link_vote_down[:class]).to include 'vote-active'
+      end
+    end
+
+    scenario 'switch vote from down to up' do
+      within('#question > .votes') do
+        link_vote_up = first(:xpath, "//a[@title='Vote up!']")
+        link_vote_down = first(:xpath, "//a[@title='Vote down!']")
+        link_vote_down.click
+        sleep 0.5
+        link_vote_up.click
+        sleep 0.5
+
+        expect(first('.vote-rating')).to have_content '1'
+        expect(link_vote_up[:class]).to include 'vote-active'
+        expect(link_vote_down[:class]).to_not include 'vote-active'
+      end
+    end
+
+    scenario 'show user votes on the page' do
+      within('#question > .votes') do
+        first(:xpath, "//a[@title='Vote up!']").click
+        sleep 1
+      end
+
+      visit current_path
+
+      within('#question > .votes') do
+        link_vote_up = first(:xpath, "//a[@title='Vote up!']")
+        link_vote_down = first(:xpath, "//a[@title='Vote down!']")
+
+        expect(first('.vote-rating')).to have_content '1'
+        expect(link_vote_up[:class]).to include 'vote-active'
+        expect(link_vote_down[:class]).to_not include 'vote-active'
+      end
+    end
 
     scenario 'cannot vote for his question' do
       visit question_path(question_user)

@@ -3,10 +3,11 @@ module Voted
 
   included do
     before_action :set_votable, only: %i[vote_up vote_down]
+    before_action :set_vote, only: %i[vote_up vote_down]
   end
 
   def vote_up
-    if @votable.vote_plus
+    if @vote.vote_plus
       render_rating
     else
       render_errors
@@ -14,7 +15,7 @@ module Voted
   end
 
   def vote_down
-    if @votable.vote_minus
+    if @vote.vote_minus
       render_rating
     else
       render_errors
@@ -31,10 +32,14 @@ module Voted
     @votable = model_klass.find(params[:id])
   end
 
+  def set_vote
+    @vote = current_user.votes.find_by(votable: @votable) || Vote.new(user: current_user, votable: @votable)
+  end
+
   def render_rating
     respond_to do |format|
       format.json do
-        render json: { resource: @votable.class.name.downcase, rating: @votable.rating }
+        render json: { resource: @votable.class.name.downcase, rating: @vote.votable.rating }
       end
     end
   end
@@ -42,7 +47,7 @@ module Voted
   def render_errors
     respond_to do |format|
       format.json do
-        render json: @votable.errors.full_messages, status: :unprocessable_entity
+        render json: @vote.errors.full_messages, status: :unprocessable_entity
       end
     end
   end
