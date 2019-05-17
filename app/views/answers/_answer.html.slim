@@ -1,40 +1,43 @@
 - if answer.persisted?
   = content_tag :li, class: "card answer-list__item #{'best-answer' if answer.best}", data: { 'answer-id': answer.id }
-    .card-body
-      h5.card-title = answer.body
+    .card-body.row
+      .actions.col-1.text-center
+        = render 'shared/votes', resource: answer
 
-      - if current_user&.author_of?(@question)
-        = button_to 'Select as best answer', best_answer_path(answer),
-                { class: "btn btn-outline-primary float-right btn-best-answer",
-                        method: :patch,
-                        type: "button",
-                        remote: true,
-                        'aria-pressed': "false",
-                        params: { question: @question }}
+        - if current_user&.author_of?(@question)
+          .link-best
+            = link_to_best(answer)
 
-      = render 'shared/links', resource: answer
+        - if current_user&.author_of?(answer)
+          .link-edit
+            = link_to '#', title: 'Edit', class: 'edit-answer-link', data: {answer_id: answer.id} do
+              = octicon 'pencil', width: 16
+          .link-delete
+            = link_to answer_path(answer), title: 'Delete',
+                    method: :delete,
+                    data: {confirm: 'Are you sure?'},
+                    remote: true do
+              = octicon 'trashcan', width: 16
 
-      - if answer.files.attached?
-        p.attached-files
-          'Attached files:
-          - answer.files.each do |file|
-            span>
-              = link_to file.filename.to_s, url_for(file)
-              = link_to attachment_path(file),
-                      method: :delete,
-                      data: {confirm: 'Are you sure?'},
-                      :remote => true do
-                = octicon("x", :height => 16, :class => "d-inline")
+      .card-content.col-11
+        h5.card-title = answer.body
+        = render 'shared/links', resource: answer
 
-      h6.card-subtitle.mb-2.text-muted.answer__attrs>
-        'Author: <strong>#{answer.author.email}</strong> at #{answer.updated_at}
+        - if answer.files.attached?
+          p.attached-files
+            'Attached files:
+            - answer.files.each do |file|
+              span>
+                = link_to file.filename.to_s, url_for(file)
+                = link_to attachment_path(file),
+                        method: :delete,
+                        data: {confirm: 'Are you sure?'},
+                        :remote => true do
+                  = octicon("x", :height => 16, :class => "d-inline")
 
-      - if current_user&.author_of?(answer)
-        'Actions:
-        =>link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-        = link_to 'Delete', answer_path(answer),
-                method: :delete,
-                data: {confirm: 'Are you sure?'},
-                remote: true
-        = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
-          = render partial: 'answers/form_fields', locals: {f: f}
+        h6.card-subtitle.mb-2.text-muted.answer__attrs>
+          'Author: <strong>#{answer.author.email}</strong> at #{answer.updated_at}
+
+        - if current_user&.author_of?(answer)
+          = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
+            = render partial: 'answers/form_fields', locals: {f: f}

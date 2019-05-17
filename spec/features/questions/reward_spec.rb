@@ -45,8 +45,5 @@ feature 'User can add reward to question', %q{
       expect(page).to have_content 'Reward image must be added'
       expect(page).to have_content 'please, enter valid data'
     end
-
-    scenario 'tries to add invalid file of reward'
-
   end
 end
