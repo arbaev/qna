@@ -45,24 +45,15 @@ class Vote < ApplicationRecord
     e.message = "You can't vote for your own item"
   end
 
-  def delete(val)
-    Vote.transaction do
-      votable.update!(rating: votable.rating - val)
-      destroy!
-    end
+  def delete(_val)
+    destroy!
   end
 
-  def switch(val)
-    Vote.transaction do
-      update!(value: value * -1)
-      votable.update!(rating: votable.rating + val * 2)
-    end
+  def switch(_val)
+    update!(value: value * -1)
   end
 
   def vote(val)
-    Vote.transaction do
-      update!(value: val)
-      votable.update!(rating: votable.rating + val)
-    end
+    update!(value: val)
   end
 end
