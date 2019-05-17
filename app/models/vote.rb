@@ -3,10 +3,11 @@ class Vote < ApplicationRecord
   belongs_to :user
 
   RATE = { plus: 1, minus: -1 }.freeze
-  STATES = %w[author vote delete switch].freeze
+  STATES = %w[vote delete switch].freeze
 
   validates :value, presence: true, inclusion: { in: RATE.values }
   validates :votable_type, inclusion: %w[Question Answer]
+  validate :validate_user_not_author
 
   def vote_plus
     send state(:plus), RATE[:plus]
@@ -24,10 +25,6 @@ class Vote < ApplicationRecord
     end.first
   end
 
-  def author?(_key)
-    user == votable.author
-  end
-
   def delete?(key)
     persisted? && value == RATE[key]
   end
@@ -40,11 +37,6 @@ class Vote < ApplicationRecord
     new_record?
   end
 
-  def author(_val)
-  rescue StandardError => e
-    e.message = "You can't vote for your own item"
-  end
-
   def delete(_val)
     destroy!
   end
@@ -55,5 +47,9 @@ class Vote < ApplicationRecord
 
   def vote(val)
     update!(value: val)
+  end
+
+  def validate_user_not_author
+    errors.add(:user, "can't vote for your own #{votable_type}") if user&.author_of?(votable)
   end
 end
