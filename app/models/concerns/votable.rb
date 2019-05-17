@@ -6,7 +6,6 @@ module Votable
   end
 
   def rating
-    Vote.where('votable_id = :votable_id AND votable_type = :votable_type',
-               votable_id: id, votable_type: self.class.name).sum(:value)
+    votes.sum(:value)
   end
 end
