@@ -7,7 +7,7 @@ module VotesHelper
             title: "Vote #{action}!",
             class: "vote-link #{vote_active_class}",
             remote: true, method: :post,
-            data: {type: :json, "#{resource.class.name}-id": resource.id} do
+            data: { type: :json, "#{resource.class.name}-id": resource.id } do
       octicon "triangle-#{action}", width: 24
     end
   end
