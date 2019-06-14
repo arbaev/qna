@@ -5,6 +5,7 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: %i[update destroy best]
   before_action :set_question, only: %i[create update destroy best]
   before_action :authority!, only: %i[update destroy]
+  after_action :publish, only: :create
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -58,6 +59,23 @@ class AnswersController < ApplicationController
     unless current_user.author_of?(@answer)
       flash.now[:alert] = 'you must be author of answer'
       render 'questions/show'
+    end
+  end
+
+  def publish
+    return if @answer.errors.present?
+
+    ActionCable.server.broadcast "question#{@question.id}:answers",
+                                 { answer: @answer,
+                                   author: @answer.author,
+                                   links: @answer.links,
+                                   files: files_data }
+  end
+
+  def files_data
+    @answer.files.map do |file| { id: file.id,
+                                  url: url_for(file),
+                                  name: file.filename.to_s }
     end
   end
 end
