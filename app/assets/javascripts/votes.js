@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(){
-    $('.vote-link').on ('ajax:success', function(e) {
+    $('section.content').on ('ajax:success', '.vote-link', function(e) {
         e.preventDefault();
         $('#flash').html('');
         var response = e.detail[0];
@@ -17,7 +17,7 @@ $(document).on('turbolinks:load', function(){
 
         divRating.html(response.rating);
     })
-    .on ('ajax:error', function(e) {
+    .on ('ajax:error', '.vote-link', function(e) {
         var errors = e.detail[0];
 
         $.each(errors, function (index, value) {
