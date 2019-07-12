@@ -47,7 +47,9 @@ gem 'aws-sdk-s3', '~> 1'
 
 # Github API support
 gem "octokit", "~> 4.0"
-
+# OAuth support
+gem 'omniauth'
+gem 'omniauth-github'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
