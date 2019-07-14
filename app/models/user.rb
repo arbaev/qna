@@ -4,7 +4,7 @@ class User < ApplicationRecord
          :recoverable,
          :rememberable,
          :validatable,
-         :omniauthable, omniauth_providers: [:github]
+         :omniauthable, omniauth_providers: [:github, :mail_ru]
 
   has_many :questions, foreign_key: 'author_id', dependent: :destroy
   has_many :answers, foreign_key: 'author_id', dependent: :destroy

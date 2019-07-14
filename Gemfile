@@ -50,6 +50,7 @@ gem "octokit", "~> 4.0"
 # OAuth support
 gem 'omniauth'
 gem 'omniauth-github'
+gem 'omniauth-mail_ru'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
