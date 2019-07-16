@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   end
 
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
+  devise_scope :user do
+    resources :oauth_confirmations, only: %i[new create]
+  end
+
   root to: "questions#index"
 
   resources :questions,
