@@ -268,7 +268,10 @@ Devise.setup do |config|
                   Rails.application.credentials[Rails.env.to_sym][:mail_ru][:app_secret]
   config.omniauth :vkontakte,
                   Rails.application.credentials[Rails.env.to_sym][:vkontakte][:app_key],
-                  Rails.application.credentials[Rails.env.to_sym][:vkontakte][:app_secret]
+                  Rails.application.credentials[Rails.env.to_sym][:vkontakte][:app_secret], {
+                      strategy_class: OmniAuth::Strategies::Vkontakte,
+                      provider_ignores_state: true
+                  }
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
