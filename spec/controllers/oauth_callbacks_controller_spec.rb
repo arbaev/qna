@@ -9,7 +9,7 @@ RSpec.describe OauthCallbacksController, type: :controller do
 
   providers.each do |provider|
     describe provider.to_s.capitalize do
-      let(:oauth_data) { {'provider' => provider.to_s, 'uid' => 123 } }
+      let(:oauth_data) { OmniAuth::AuthHash.new(provider: provider.to_s, uid: 123456, info: { email: 'new@user.com' }) }
 
       it 'finds user from oauth data' do
         allow(request.env).to receive(:[]).and_call_original

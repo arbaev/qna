@@ -1,17 +1,16 @@
 class OauthCallbacksController < Devise::OmniauthCallbacksController
-  def github
-    oauth(auth)
-  end
+  before_action :oauth
 
-  def mail_ru
-    oauth(auth)
-  end
+  def github; end
 
-  def vkontakte
-    oauth(auth)
-  end
+  def mail_ru; end
 
-  def oauth(auth)
+  def vkontakte; end
+
+  private
+
+  def oauth
+    auth = request.env['omniauth.auth']
     @user = User.find_for_oauth(auth)
 
     if @user&.confirmed?
@@ -24,11 +23,5 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
     else
       redirect_to root_path, alert: 'Something went wrong'
     end
-  end
-
-  private
-
-  def auth
-    request.env['omniauth.auth']
   end
 end

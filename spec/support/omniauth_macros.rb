@@ -22,4 +22,12 @@ module OmniauthMacros
       )
     )
   end
+
+  def mock_auth_vkontakte
+    OmniAuth.config.mock_auth[:vkontakte] = OmniAuth::AuthHash.new(
+      provider: 'vkontakte',
+      uid: '989898',
+      info: OmniAuth::AuthHash::InfoHash.new(email: nil)
+    )
+  end
 end
