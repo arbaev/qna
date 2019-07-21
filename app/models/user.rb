@@ -11,7 +11,7 @@ class User < ApplicationRecord
   has_many :answers, foreign_key: 'author_id', dependent: :destroy
   has_many :rewards, dependent: :destroy
   has_many :votes, dependent: :destroy
-  has_many :comments, dependent: :destroy
+  has_many :comments, foreign_key: 'author_id', dependent: :destroy
   has_many :authorizations, dependent: :destroy
 
   def self.find_for_oauth(auth)
