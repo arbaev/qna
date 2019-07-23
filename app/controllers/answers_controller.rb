@@ -9,6 +9,8 @@ class AnswersController < ApplicationController
   before_action :authority!, only: %i[update destroy]
   after_action :publish, only: :create
 
+  authorize_resource
+
   def create
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
