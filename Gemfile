@@ -47,7 +47,11 @@ gem 'aws-sdk-s3', '~> 1'
 
 # Github API support
 gem "octokit", "~> 4.0"
-
+# OAuth support
+gem 'omniauth'
+gem 'omniauth-github'
+gem 'omniauth-mail_ru'
+gem 'omniauth-vkontakte'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -71,6 +75,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  # preview email in the default browser
+  gem "letter_opener"
 end
 
 group :test do
@@ -84,6 +90,7 @@ group :test do
   gem 'rails-controller-testing'
   gem 'launchy'
   gem 'database_cleaner'
+  gem 'capybara-email'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
