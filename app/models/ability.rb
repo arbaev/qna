@@ -1,0 +1,39 @@
+# frozen_string_literal: true
+
+class Ability
+  include CanCan::Ability
+
+  attr_reader :user
+
+  def initialize(user)
+    @user = user
+
+    if user
+      user_abilities
+    else
+      guest_abilities
+    end
+  end
+
+  def guest_abilities
+    can :read, [Question, Answer, Comment]
+  end
+
+  def user_abilities
+    guest_abilities
+    can :read, user
+    can :create, :all
+    can :update, [Question, Answer], author_id: user.id
+    can :destroy, [Question, Answer], author_id: user.id
+
+    can :best, Answer, question: { author_id: user.id }
+
+    can :manage, ActiveStorage::Attachment do |attachment|
+      user.author_of? attachment.record
+    end
+
+    can [:vote_up, :vote_down], [Question, Answer] do |item|
+      !user.author_of? item
+    end
+  end
+end
