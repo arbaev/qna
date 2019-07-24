@@ -15,13 +15,13 @@ RSpec.describe Ability do
 
   describe 'for user' do
     let(:user) { create :user }
-    let(:question) { create :question, author: user }
-    let(:answer) { create :answer, question: question, author: user }
+    let(:question) { create :question, :with_attachment, author: user }
+    let(:answer) { create :answer, :with_attachment, question: question, author: user }
     let(:answer_for_question_user2) { create :answer, question: question_user2, author: user }
 
     let(:user2) { create :user }
-    let(:question_user2) { create :question, author: user2 }
-    let(:answer_user2) { create :answer, question: question, author: user2 }
+    let(:question_user2) { create :question, :with_attachment, author: user2 }
+    let(:answer_user2) { create :answer, :with_attachment, question: question, author: user2 }
 
     it { should_not be_able_to :manage, :all }
 
@@ -63,7 +63,10 @@ RSpec.describe Ability do
     end
 
     context 'attaching files' do
-      it { should be_able_to :destroy, ActiveStorage::Attachment }
+      it { should be_able_to :destroy, question.files.last }
+      it { should_not be_able_to :destroy, question_user2.files.last }
+      it { should be_able_to :destroy, answer.files.last }
+      it { should_not be_able_to :destroy, answer_user2.files.last }
     end
   end
 end
