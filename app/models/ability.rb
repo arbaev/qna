@@ -21,20 +21,19 @@ class Ability
 
   def user_abilities
     guest_abilities
-    can :read, User
-    can :create, [Question, Answer, Comment]
+    can :read, user
+    can :create, :all
     can :update, [Question, Answer], author_id: user.id
     can :destroy, [Question, Answer], author_id: user.id
 
     can :best, Answer, question: { author_id: user.id }
+
     can :manage, ActiveStorage::Attachment do |attachment|
       user.author_of? attachment.record
     end
 
-    can :manage, Link, linkable: { author_id: user.id }
-
-    can :manage, Votable, votable: { author_id: !user.id }
-
-    can :manage, Reward, question: { author_id: user.id }
+    can [:vote_up, :vote_down], [Question, Answer] do |item|
+      !user.author_of? item
+    end
   end
 end

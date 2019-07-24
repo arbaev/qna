@@ -6,8 +6,6 @@ class QuestionsController < ApplicationController
   before_action :authority!, only: %i[update destroy best_answer]
   after_action :publish, only: :create
 
-  authorize_resource
-
   def index
     @questions = Question.all
   end

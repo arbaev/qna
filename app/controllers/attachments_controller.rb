@@ -3,8 +3,6 @@ class AttachmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :authority!
 
-  authorize_resource
-
   def destroy
     @attachment.purge
     flash.now[:notice] = "#{@attachment.filename} successfully deleted"
