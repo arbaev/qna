@@ -21,9 +21,6 @@ RSpec.describe OauthConfirmationsController, type: :controller do
         expect { post :create, params: { email: email } }.to change(User, :count).by(1)
       end
 
-      # если это нужно проверять в контроллере, то как?
-      it 'send confirmation instructions'
-
       it 'render create view' do
         post :create, params: { email: email }
 

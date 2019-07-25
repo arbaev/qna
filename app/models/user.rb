@@ -21,4 +21,8 @@ class User < ApplicationRecord
   def author_of?(resource)
     resource.author_id == id
   end
+
+  def confirmation_required?
+    false
+  end
 end

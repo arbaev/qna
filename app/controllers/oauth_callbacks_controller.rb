@@ -11,17 +11,25 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
 
   def oauth
     auth = request.env['omniauth.auth']
-    @user = User.find_for_oauth(auth)
+    unless auth
+      redirect_to new_user_session_path, alert: 'Authentication failed, please try again.'
+      return
+    end
 
+    @user = User.find_for_oauth(auth)
     if @user&.confirmed?
       sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: auth.provider.to_s.capitalize) if is_navigational_format?
-    elsif @user
+      set_flash_msg(auth)
+    else
       session[:provider] = auth.provider
       session[:uid] = auth.uid
       redirect_to new_user_confirmation_path
-    else
-      redirect_to root_path, alert: 'Something went wrong'
+    end
+  end
+
+  def set_flash_msg(auth)
+    if is_navigational_format?
+      set_flash_message(:notice, :success, kind: auth.provider.to_s.capitalize)
     end
   end
 end
