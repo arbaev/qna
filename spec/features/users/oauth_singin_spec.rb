@@ -17,7 +17,7 @@ feature 'User can sign in via OAuth providers:' do
       OmniAuth.config.mock_auth[:github] = :invalid_credentials
       click_on 'Sign in with GitHub'
 
-      expect(page).to have_content 'Could not authenticate you from GitHub because "Invalid credentials".'
+      expect(page).to have_content 'Authentication failed, please try again.'
     end
   end
 
@@ -27,14 +27,14 @@ feature 'User can sign in via OAuth providers:' do
       click_on 'Sign in with MailRu'
 
       expect(page).to have_content OmniAuth.config.mock_auth[:mail_ru].info.email
-      expect(page).to have_content 'Successfully authenticated from MailRu account.'
+      expect(page).to have_content 'Successfully authenticated from Mail_ru account.'
     end
 
     scenario 'with invalid credentials' do
       OmniAuth.config.mock_auth[:mail_ru] = :invalid_credentials
       click_on 'Sign in with MailRu'
 
-      expect(page).to have_content 'Could not authenticate you from MailRu because "Invalid credentials".'
+      expect(page).to have_content 'Authentication failed, please try again.'
     end
   end
 
@@ -61,7 +61,7 @@ feature 'User can sign in via OAuth providers:' do
       OmniAuth.config.mock_auth[:vkontakte] = :invalid_credentials
       click_on 'Sign in with Vkontakte'
 
-      expect(page).to have_content 'Could not authenticate you from Vkontakte because "Invalid credentials".'
+      expect(page).to have_content 'Authentication failed, please try again.'
     end
   end
 end

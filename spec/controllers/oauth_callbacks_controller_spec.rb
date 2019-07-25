@@ -22,6 +22,8 @@ RSpec.describe OauthCallbacksController, type: :controller do
         let!(:user) { create(:user) }
 
         before do
+          allow(request.env).to receive(:[]).and_call_original
+          allow(request.env).to receive(:[]).with('omniauth.auth').and_return(oauth_data)
           allow(User).to receive(:find_for_oauth).and_return(user)
           get provider
         end
@@ -30,8 +32,7 @@ RSpec.describe OauthCallbacksController, type: :controller do
           expect(subject.current_user).to eq user
         end
 
-
-        it 'redirects to root path' do
+        it 'redirects to root page' do
           expect(response).to redirect_to root_path
         end
       end
@@ -42,8 +43,8 @@ RSpec.describe OauthCallbacksController, type: :controller do
           get provider
         end
 
-        it 'redirects to root path' do
-          expect(response).to redirect_to root_path
+        it 'redirects to sign in page' do
+          expect(response).to redirect_to new_user_session_path
         end
 
         it 'does not login user' do
