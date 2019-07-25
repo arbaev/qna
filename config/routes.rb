@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   concern :votable do
     post :vote_up, :vote_down, on: :member
   end

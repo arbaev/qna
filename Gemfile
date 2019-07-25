@@ -52,6 +52,7 @@ gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-mail_ru'
 gem 'omniauth-vkontakte'
+gem 'doorkeeper'
 # Authoring
 gem 'cancancan'
 # Use Capistrano for deployment
