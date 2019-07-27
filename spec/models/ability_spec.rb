@@ -50,6 +50,7 @@ RSpec.describe Ability do
     context 'reading users profile' do
       it { should be_able_to :read, user }
       it { should_not be_able_to :read, user2 }
+      it { should be_able_to :me, user }
     end
 
     context 'selecting best answer' do

@@ -54,6 +54,7 @@ gem 'omniauth-mail_ru'
 gem 'omniauth-vkontakte'
 gem 'doorkeeper'
 gem 'active_model_serializers', '~> 0.10.0'
+gem 'oj'
 # Authoring
 gem 'cancancan'
 # Use Capistrano for deployment
