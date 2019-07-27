@@ -40,4 +40,50 @@ describe 'Profiles API', type: :request do
       end
     end
   end
+
+  describe 'GET /api/v1/profiles' do
+    context 'unauthorized' do
+      it 'returns 401 status if there is no access_token' do
+        get '/api/v1/profiles', headers: headers
+        expect(response.status).to eq 401
+      end
+
+      it 'returns 401 status if access_token is invalid' do
+        get '/api/v1/profiles', params: { access_token: '1234' }, headers: headers
+        expect(response.status).to eq 401
+      end
+    end
+
+    context 'authorized' do
+      let!(:users) { create_list(:user, 5) }
+      let(:me) { users.first }
+      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+
+      before { get '/api/v1/profiles', params: { access_token: access_token.token }, headers: headers }
+
+      it 'returns 200 status' do
+        expect(response).to be_successful
+      end
+
+      it 'return all users but me' do
+        expect(json['users'].size).to eq users.size - 1
+        expect(json['users']).to_not include me.id
+      end
+
+      it 'returns all public fields' do
+        user_fields = %w[id email admin created_at updated_at]
+
+        user_fields.each do |attr|
+          expect(json['users'].last[attr]).to eq users.last.send(attr).as_json
+        end
+      end
+
+      it 'does not return private fields' do
+        %w[password encrypted_password].each do |attr|
+          expect(json).to_not have_key(attr)
+        end
+      end
+    end
+
+  end
 end
