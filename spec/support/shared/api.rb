@@ -17,3 +17,17 @@ shared_examples_for 'Request successful' do
     expect(response).to be_successful
   end
 end
+
+shared_examples_for 'All items returnable' do
+  it 'all items' do
+    expect(resource_response.size).to eq resource.size
+  end
+end
+
+shared_examples_for 'Attrs returnable' do
+  it "all public fields" do
+    attrs.each do |attr|
+      expect(resource_response[attr]).to eq resource.send(attr).as_json
+    end
+  end
+end

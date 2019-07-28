@@ -21,32 +21,30 @@ describe 'Questions API', type: :request do
 
       it_behaves_like 'Request successful'
 
-      it 'returns all questions' do
-        expect(json['questions'].size).to eq questions.size
+      it_behaves_like 'All items returnable' do
+        let(:resource_response) { json['questions'] }
+        let(:resource) { questions }
       end
 
-      it 'returns all public fields for question' do
-        public_fields = %w[id title body created_at updated_at]
-
-        public_fields.each do |attr|
-          expect(json['questions'].last[attr]).to eq questions.last.send(attr).as_json
-        end
+      it_behaves_like 'Attrs returnable' do
+        let(:attrs) { %w[id title body created_at updated_at] }
+        let(:resource_response) { json['questions'].last }
+        let(:resource) { questions.last }
       end
 
       describe 'answers' do
         let(:answer) { answers.first }
         let(:answer_response) { json['questions'].first['answers'] }
 
-        it 'returns all question answers' do
-          expect(answer_response.size).to eq answers.size
+        it_behaves_like 'All items returnable' do
+          let(:resource_response) { answer_response }
+          let(:resource) { answers }
         end
 
-        it 'returns all public fields for question answers' do
-          public_fields = %w[id body created_at updated_at]
-
-          public_fields.each do |attr|
-            expect(answer_response.first[attr]).to eq answer.send(attr).as_json
-          end
+        it_behaves_like 'Attrs returnable' do
+          let(:attrs) { %w[id body created_at updated_at] }
+          let(:resource_response) { answer_response.first }
+          let(:resource) { answer }
         end
       end
     end
@@ -72,54 +70,62 @@ describe 'Questions API', type: :request do
 
       it_behaves_like 'Request successful'
 
-      it 'returns all public fields for question' do
-        public_fields = %w[id title body created_at updated_at]
-
-        public_fields.each do |attr|
-          expect(question_response[attr]).to eq question.send(attr).as_json
+      context 'question' do
+        it_behaves_like 'Attrs returnable' do
+          let(:attrs) { %w[id title body created_at updated_at] }
+          let(:resource_response) { question_response }
+          let(:resource) { question }
         end
       end
 
-      it 'returns all question answers' do
-        expect(question_response['answers'].size).to eq answers.size
-      end
+      context 'question answers' do
+        it_behaves_like 'All items returnable' do
+          let(:resource_response) { question_response['answers'] }
+          let(:resource) { answers }
+        end
 
-      it 'returns all public fields for question answers' do
-        public_fields = %w[id body created_at updated_at author_id]
-
-        public_fields.each do |attr|
-          expect(question_response['answers'].first[attr]).to eq answers.first.send(attr).as_json
+        it_behaves_like 'Attrs returnable' do
+          let(:attrs) { %w[id body created_at updated_at author_id] }
+          let(:resource_response) { question_response['answers'].first }
+          let(:resource) { answers.first }
         end
       end
 
-      it 'returns all question comments' do
-        expect(question_response['comments'].size).to eq comments.size
-      end
+      context 'question comments' do
+        it_behaves_like 'All items returnable' do
+          let(:resource_response) { question_response['comments'] }
+          let(:resource) { comments }
+        end
 
-      it 'returns all public fields for question comments' do
-        public_fields = %w[id body created_at updated_at author_id]
-        public_fields.each do |attr|
-          expect(question_response['comments'].first[attr]).to eq comments.last.send(attr).as_json
+        it_behaves_like 'Attrs returnable' do
+          let(:attrs) { %w[id body created_at updated_at author_id] }
+          let(:resource_response) { question_response['comments'].first }
+          let(:resource) { comments.last }
         end
       end
 
-      it 'returns all question links' do
-        expect(question_response['links'].size).to eq links.size
-      end
+      context 'question links' do
+        it_behaves_like 'All items returnable' do
+          let(:resource_response) { question_response['links'] }
+          let(:resource) { links }
+        end
 
-      it 'returns all public fields for question links' do
-        public_fields = %w[id name url created_at updated_at]
-        public_fields.each do |attr|
-          expect(question_response['links'].first[attr]).to eq links.last.send(attr).as_json
+        it_behaves_like 'Attrs returnable' do
+          let(:attrs) { %w[id name url created_at updated_at] }
+          let(:resource_response) { question_response['links'].first }
+          let(:resource) { links.last }
         end
       end
 
-      it 'returns all question files' do
-        expect(question_response['files'].size).to eq files.size
-      end
+      context 'question attachments' do
+        it_behaves_like 'All items returnable' do
+          let(:resource_response) { question_response['files'] }
+          let(:resource) { files }
+        end
 
-      it 'returns url fields for question files' do
-        expect(question_response['files'].first['url']).to eq rails_blob_path(files.first, only_path: true)
+        it 'returns url fields for question files' do
+          expect(question_response['files'].first['url']).to eq rails_blob_path(files.first, only_path: true)
+        end
       end
     end
   end
