@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::QuestionsController < Api::V1::BaseController
   load_and_authorize_resource
 
@@ -24,6 +26,14 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   def update
     if question.update(question_params)
       render json: question, status: :created
+    else
+      render json: { errors: question.errors }, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if question.destroy!
+      render json: {}, status: :ok
     else
       render json: { errors: question.errors }, status: :unprocessable_entity
     end
