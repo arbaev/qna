@@ -129,4 +129,64 @@ describe 'Questions API', type: :request do
       end
     end
   end
+
+  describe 'POST /api/v1/questions' do
+    let(:api_path) { "/api/v1/questions" }
+    let(:headers) { { "ACCEPT" => "application/json" } }
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :post }
+    end
+
+    context 'authorized' do
+      let(:me) { create :user }
+      let(:question) { create :question, author: me }
+      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let(:question_response) { json['question'] }
+
+      describe 'create question with valid attrs' do
+        let(:params) { { access_token: access_token.token,
+                         question: { title: question.title, body: question.body } } }
+
+        before { post api_path, headers: headers, params: params }
+
+        it 'returns :created status' do
+          expect(response.status).to eq 201
+        end
+
+        it 'saves a new question in the database' do
+          expect(Question.count).to eq 2
+        end
+
+        it_behaves_like 'Attrs returnable' do
+          let(:attrs) { %w[title body] }
+          let(:resource_response) { question_response }
+          let(:resource) { question }
+        end
+
+        it 'new question belongs to the logged user' do
+          expect(question_response['author']['id']).to eq me.id
+        end
+      end
+
+      describe 'create question with invalid attrs' do
+        let(:params) { { access_token: access_token.token,
+                         question: { title: nil, body: nil } } }
+
+        before { post api_path, headers: headers, params: params }
+
+        it 'returns :unprocessable_entity status' do
+          expect(response.status).to eq 422
+        end
+
+        it 'does not saves a new question in the database' do
+          expect(Question.count).to eq 0
+        end
+
+        it 'returns error message' do
+          expect(json['errors']).to be_truthy
+        end
+      end
+
+    end
+  end
 end
