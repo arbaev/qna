@@ -13,7 +13,7 @@ shared_examples_for 'API Authorizable' do
 end
 
 shared_examples_for 'Request successful' do
-  it 'returns 200 status' do
+  it 'returns 2xx status' do
     expect(response).to be_successful
   end
 end

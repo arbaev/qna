@@ -186,7 +186,65 @@ describe 'Questions API', type: :request do
           expect(json['errors']).to be_truthy
         end
       end
+    end
+  end
 
+  describe 'PATCH /api/v1/questions/:id' do
+    let(:me) { create :user }
+    let(:question) { create :question, author: me }
+    let(:api_path) { "/api/v1/questions/#{question.id}" }
+    let(:headers) { { "ACCEPT" => "application/json" } }
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :patch }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let(:question_response) { json['question'] }
+
+      describe 'create question with valid attrs' do
+        let(:params) { { access_token: access_token.token,
+                         question: { title: question.title, body: question.body } } }
+
+        before { patch api_path, headers: headers, params: params }
+
+        it 'returns :created status' do
+          expect(response.status).to eq 201
+        end
+
+        it 'saves an updated question to the database' do
+          expect(Question.count).to eq 1
+        end
+
+        it_behaves_like 'Attrs returnable' do
+          let(:attrs) { %w[title body] }
+          let(:resource_response) { question_response }
+          let(:resource) { question }
+        end
+
+        it 'updated question belongs to the logged user' do
+          expect(question_response['author']['id']).to eq me.id
+        end
+      end
+
+      describe 'create question with invalid attrs' do
+        let(:params) { { access_token: access_token.token,
+                         question: { title: nil, body: nil } } }
+
+        before { patch api_path, headers: headers, params: params }
+
+        it 'returns :unprocessable_entity status' do
+          expect(response.status).to eq 422
+        end
+
+        it 'does not saves a new question in the database' do
+          expect(Question.count).to eq 1
+        end
+
+        it 'returns error message' do
+          expect(json['errors']).to be_truthy
+        end
+      end
     end
   end
 end

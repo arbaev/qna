@@ -1,4 +1,6 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
+  load_and_authorize_resource
+
   def index
     questions = Question.all
     render json: questions
@@ -13,6 +15,14 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     question.author = current_resource_owner
 
     if question.save
+      render json: question, status: :created
+    else
+      render json: { errors: question.errors }, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if question.update(question_params)
       render json: question, status: :created
     else
       render json: { errors: question.errors }, status: :unprocessable_entity
