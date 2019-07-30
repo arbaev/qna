@@ -5,16 +5,15 @@ describe 'Profiles API', type: :request do
                      "ACCEPT" => 'application/json' } }
 
   describe 'GET /api/v1/profiles/me' do
+    let(:verb) { :get }
     let(:api_path) { '/api/v1/profiles/me' }
-    it_behaves_like 'API Authorizable' do
-      let(:method) { :get }
-    end
+    it_behaves_like 'API Authorizable'
 
     context 'authorized' do
       let(:me) { create(:user) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-      before { get api_path, params: { access_token: access_token.token }, headers: headers }
+      before { send verb, api_path, params: { access_token: access_token.token }, headers: headers }
 
       it_behaves_like 'Request successful'
 
@@ -33,17 +32,16 @@ describe 'Profiles API', type: :request do
   end
 
   describe 'GET /api/v1/profiles' do
+    let(:verb) { :get }
     let(:api_path) { '/api/v1/profiles' }
-    it_behaves_like 'API Authorizable' do
-      let(:method) { :get }
-    end
+    it_behaves_like 'API Authorizable'
 
     context 'authorized' do
       let!(:users) { create_list(:user, 5) }
       let(:me) { users.first }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-      before { get '/api/v1/profiles', params: { access_token: access_token.token }, headers: headers }
+      before { send verb, api_path, params: { access_token: access_token.token }, headers: headers }
 
       it_behaves_like 'Request successful'
 
@@ -64,6 +62,5 @@ describe 'Profiles API', type: :request do
         end
       end
     end
-
   end
 end

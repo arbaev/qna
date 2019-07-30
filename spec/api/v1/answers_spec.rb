@@ -1,23 +1,23 @@
 require 'rails_helper'
 
 describe 'Answers API', type: :request do
-  let(:headers) { { "CONTENT_TYPE" => "application/json",
-                    "ACCEPT" => 'application/json' } }
+  let(:headers) { { "ACCEPT" => "application/json" } }
   let(:question) { create :question }
+  let(:me) { create :user }
+  let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+  let(:answer) { create :answer, question: question, author: me }
+  let(:answer_response) { json['answer'] }
 
   describe 'GET /api/v1/questions/:question_id/answers' do
+    let(:verb) { :get }
     let(:api_path) { "/api/v1/questions/#{question.id}/answers" }
-    it_behaves_like 'API Authorizable' do
-      let(:method) { :get }
-    end
+    it_behaves_like 'API Authorizable'
 
     context 'authorized' do
-      let(:me) { create :user }
-      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
       let!(:answers) { create_list(:answer, 3, question: question) }
       let(:response_answers) { json['answers'] }
 
-      before { get api_path, params: { access_token: access_token.token }, headers: headers }
+      before { send verb, api_path, params: { access_token: access_token.token }, headers: headers }
 
       it_behaves_like 'Request successful'
 
@@ -38,20 +38,16 @@ describe 'Answers API', type: :request do
 
   describe 'GET /api/v1/answers/:id' do
     let(:answer) { create :answer, :with_attachment, question: question }
+    let(:verb) { :get }
     let(:api_path) { "/api/v1/answers/#{answer.id}" }
-    it_behaves_like 'API Authorizable' do
-      let(:method) { :get }
-    end
+    it_behaves_like 'API Authorizable'
 
     context 'authorized' do
-      let(:me) { create :user }
-      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
       let!(:links) { create_list(:link, 3, linkable: answer) }
       let!(:files) { answer.files }
       let!(:comments) { create_list(:comments_list, 3, commentable: answer) }
-      let(:answer_response) { json['answer'] }
 
-      before { get api_path, params: { access_token: access_token.token }, headers: headers }
+      before { send verb, api_path, params: { access_token: access_token.token }, headers: headers }
 
       it_behaves_like 'Request successful'
 
@@ -103,24 +99,16 @@ describe 'Answers API', type: :request do
   end
 
   describe 'POST /api/v1/questions/:question_id/answers' do
-    let(:question) { create :question }
+    let(:verb) { :post }
     let(:api_path) { "/api/v1/questions/#{question.id}/answers" }
-    let(:headers) { { "ACCEPT" => "application/json" } }
-    it_behaves_like 'API Authorizable' do
-      let(:method) { :post }
-    end
+    it_behaves_like 'API Authorizable'
 
     context 'authorized' do
-      let(:me) { create :user }
-      let(:answer) { create :answer, question: question, author: me }
-      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
-      let(:answer_response) { json['answer'] }
-
       describe 'create answer with valid attrs' do
         let(:params) { { access_token: access_token.token,
                          answer: { body: answer.body } } }
 
-        before { post api_path, headers: headers, params: params }
+        before { send verb, api_path, headers: headers, params: params }
 
         it 'returns :created status' do
           expect(response.status).to eq 201
@@ -145,7 +133,7 @@ describe 'Answers API', type: :request do
         let(:params) { { access_token: access_token.token,
                          answer: { body: nil } } }
 
-        before { post api_path, headers: headers, params: params }
+        before { send verb, api_path, headers: headers, params: params }
 
         it 'returns :unprocessable_entity status' do
           expect(response.status).to eq 422
@@ -163,24 +151,16 @@ describe 'Answers API', type: :request do
   end
 
   describe 'PATCH /api/v1/answers/:id' do
-    let(:me) { create :user }
-    let(:question) { create :question }
-    let(:answer) { create :answer, question: question, author: me }
+    let(:verb) { :patch }
     let(:api_path) { "/api/v1/answers/#{answer.id}" }
-    let(:headers) { { "ACCEPT" => "application/json" } }
-    it_behaves_like 'API Authorizable' do
-      let(:method) { :patch }
-    end
+    it_behaves_like 'API Authorizable'
 
     context 'authorized' do
-      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
-      let(:answer_response) { json['answer'] }
-
       describe 'create answer with valid attrs' do
         let(:params) { { access_token: access_token.token,
                          answer: { body: answer.body } } }
 
-        before { patch api_path, headers: headers, params: params }
+        before { send verb, api_path, headers: headers, params: params }
 
         it 'returns :created status' do
           expect(response.status).to eq 201
@@ -223,24 +203,16 @@ describe 'Answers API', type: :request do
   end
 
   describe 'DELETE /api/v1/answers/:id' do
-    let(:me) { create :user }
-    let(:question) { create :question }
-    let(:answer) { create :answer, question: question, author: me }
+    let(:verb) { :delete }
     let(:api_path) { "/api/v1/answers/#{answer.id}" }
-    let(:headers) { { "ACCEPT" => "application/json" } }
-    it_behaves_like 'API Authorizable' do
-      let(:method) { :delete }
-    end
+    it_behaves_like 'API Authorizable'
 
     context 'authorized' do
-      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
-      let(:answer_response) { json['answer'] }
-
       describe 'delete the answer' do
         let(:params) { { access_token: access_token.token,
                          answer_id: answer.id } }
 
-        before { delete api_path, headers: headers, params: params }
+        before { send verb, api_path, headers: headers, params: params }
 
         it 'returns :ok status' do
           expect(response.status).to eq 200
