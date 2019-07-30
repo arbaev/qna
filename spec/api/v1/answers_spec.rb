@@ -101,4 +101,161 @@ describe 'Answers API', type: :request do
       end
     end
   end
+
+  describe 'POST /api/v1/questions/:question_id/answers' do
+    let(:question) { create :question }
+    let(:api_path) { "/api/v1/questions/#{question.id}/answers" }
+    let(:headers) { { "ACCEPT" => "application/json" } }
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :post }
+    end
+
+    context 'authorized' do
+      let(:me) { create :user }
+      let(:answer) { create :answer, question: question, author: me }
+      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let(:answer_response) { json['answer'] }
+
+      describe 'create answer with valid attrs' do
+        let(:params) { { access_token: access_token.token,
+                         answer: { body: answer.body } } }
+
+        before { post api_path, headers: headers, params: params }
+
+        it 'returns :created status' do
+          expect(response.status).to eq 201
+        end
+
+        it 'saves a new answer in the database' do
+          expect(Answer.count).to eq 2
+        end
+
+        it_behaves_like 'Attrs returnable' do
+          let(:attrs) { %w[body] }
+          let(:resource_response) { answer_response }
+          let(:resource) { answer }
+        end
+
+        it 'new answer belongs to the logged user' do
+          expect(answer_response['author']['id']).to eq me.id
+        end
+      end
+
+      describe 'create answer with invalid attrs' do
+        let(:params) { { access_token: access_token.token,
+                         answer: { body: nil } } }
+
+        before { post api_path, headers: headers, params: params }
+
+        it 'returns :unprocessable_entity status' do
+          expect(response.status).to eq 422
+        end
+
+        it 'does not saves a new answer to the database' do
+          expect(Answer.count).to eq 0
+        end
+
+        it 'returns error message' do
+          expect(json['errors']).to be_truthy
+        end
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/answers/:id' do
+    let(:me) { create :user }
+    let(:question) { create :question }
+    let(:answer) { create :answer, question: question, author: me }
+    let(:api_path) { "/api/v1/answers/#{answer.id}" }
+    let(:headers) { { "ACCEPT" => "application/json" } }
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :patch }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let(:answer_response) { json['answer'] }
+
+      describe 'create answer with valid attrs' do
+        let(:params) { { access_token: access_token.token,
+                         answer: { body: answer.body } } }
+
+        before { patch api_path, headers: headers, params: params }
+
+        it 'returns :created status' do
+          expect(response.status).to eq 201
+        end
+
+        it 'saves an updated question to the database' do
+          expect(Answer.count).to eq 1
+        end
+
+        it_behaves_like 'Attrs returnable' do
+          let(:attrs) { %w[body] }
+          let(:resource_response) { answer }
+          let(:resource) { answer }
+        end
+
+        it 'updated answer belongs to the logged user' do
+          expect(answer_response['author']['id']).to eq me.id
+        end
+      end
+
+      describe 'create answer with invalid attrs' do
+        let(:params) { { access_token: access_token.token,
+                         answer: { body: nil } } }
+
+        before { patch api_path, headers: headers, params: params }
+
+        it 'returns :unprocessable_entity status' do
+          expect(response.status).to eq 422
+        end
+
+        it 'does not saves a new answer to the database' do
+          expect(Answer.count).to eq 1
+        end
+
+        it 'returns error message' do
+          expect(json['errors']).to be_truthy
+        end
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/answers/:id' do
+    let(:me) { create :user }
+    let(:question) { create :question }
+    let(:answer) { create :answer, question: question, author: me }
+    let(:api_path) { "/api/v1/answers/#{answer.id}" }
+    let(:headers) { { "ACCEPT" => "application/json" } }
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :delete }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let(:answer_response) { json['answer'] }
+
+      describe 'delete the answer' do
+        let(:params) { { access_token: access_token.token,
+                         answer_id: answer.id } }
+
+        before { delete api_path, headers: headers, params: params }
+
+        it 'returns :ok status' do
+          expect(response.status).to eq 200
+        end
+
+        it 'deletes the answer from the database' do
+          expect(Answer.count).to eq 0
+        end
+
+        it_behaves_like 'Attrs returnable' do
+          let(:attrs) { %w[] }
+          let(:resource_response) { answer_response }
+          let(:resource) { answer }
+        end
+      end
+    end
+  end
 end
