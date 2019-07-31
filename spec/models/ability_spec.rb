@@ -13,6 +13,12 @@ RSpec.describe Ability do
     it { should_not be_able_to :manage, :all }
   end
 
+  describe 'for admin' do
+    let(:user) { create :user, admin: true }
+
+    it { should be_able_to :manage, :all }
+  end
+
   describe 'for user' do
     let(:user) { create :user }
     let(:question) { create :question, :with_attachment, author: user }
@@ -44,6 +50,7 @@ RSpec.describe Ability do
     context 'reading users profile' do
       it { should be_able_to :read, user }
       it { should_not be_able_to :read, user2 }
+      it { should be_able_to :me, user }
     end
 
     context 'selecting best answer' do
