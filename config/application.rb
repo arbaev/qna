@@ -12,6 +12,7 @@ module Qna
     config.load_defaults 5.2
     config.autoload_paths += [config.root.join('app')]
     config.action_cable.mount_path = '/websocket'
+    config.active_job.queue_adapter = :sidekiq
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

@@ -55,6 +55,10 @@ gem 'omniauth-vkontakte'
 gem 'doorkeeper'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'oj'
+# for ActiveJob
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'whenever', require: false
 # Authoring
 gem 'cancancan'
 # Use Capistrano for deployment
