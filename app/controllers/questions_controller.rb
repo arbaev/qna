@@ -21,6 +21,7 @@ class QuestionsController < ApplicationController
     @question.author = current_user
 
     if @question.save
+      @question.subscriptions.create(user: @question.author)
       redirect_to @question, notice: 'question successfully created'
     else
       flash.now[:alert] = 'please, enter valid data'

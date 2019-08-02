@@ -14,6 +14,7 @@ class AnswersController < ApplicationController
     @answer.author = current_user
 
     if @answer.save
+      NewAnswersJob.perform_now(@answer)
       flash.now[:notice] = 'answer successfully created'
     else
       flash.now[:alert] = 'please, enter text of answer'
