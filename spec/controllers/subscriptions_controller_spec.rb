@@ -7,7 +7,7 @@ RSpec.describe SubscriptionsController, type: :controller do
     let(:request_create_subscription) { post :create, params: { question_id: question.id }, format: :js }
 
     context 'Authenticated user' do
-      before { login(user) }
+      before { login user }
 
       it 'return 200 for logged user' do
         request_create_subscription
@@ -16,7 +16,7 @@ RSpec.describe SubscriptionsController, type: :controller do
       end
 
       it 'saves a new subscription to the database' do
-        expect { request_create_subscription }.to change(Subscription, :count).by(1)
+        expect { request_create_subscription }.to change(question.subscriptions, :count).by(1)
       end
 
       it 'new subscription belongs to the logged user' do
@@ -34,7 +34,7 @@ RSpec.describe SubscriptionsController, type: :controller do
       end
 
       it 'does not saves a new subscription to the database' do
-        expect { request_create_subscription }.to_not change(Subscription, :count)
+        expect { request_create_subscription }.to_not change(question.subscriptions, :count)
       end
     end
   end

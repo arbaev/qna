@@ -62,10 +62,6 @@ RSpec.describe QuestionsController, type: :controller do
       it 'broadcast to channel' do
         have_broadcasted_to("questions").with(text: question.title)
       end
-
-      it 'subscribes the author to the answers' do
-        expect(assigns(:question).subscriptions.last.user).to eq user
-      end
     end
 
     context 'with invalid attributes' do

@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, only: %i[new create update destroy delete_file]
   before_action :set_question, only: %i[show update destroy best_answer]
-  before_action :set_subscription, only: %i[show]
+  before_action :set_subscription, only: %i[show update]
   before_action :authority!, only: %i[update destroy best_answer]
   after_action :publish, only: :create
 
@@ -22,7 +22,6 @@ class QuestionsController < ApplicationController
     @question.author = current_user
 
     if @question.save
-      @question.subscriptions.create(user: @question.author)
       redirect_to @question, notice: 'question successfully created'
     else
       flash.now[:alert] = 'please, enter valid data'

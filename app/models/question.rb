@@ -15,7 +15,15 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
+  after_create :subscribe_to_answers
+
   def set_reward!(author)
     reward&.update!(user: author)
+  end
+
+  private
+
+  def subscribe_to_answers
+    subscriptions.create(user: author)
   end
 end

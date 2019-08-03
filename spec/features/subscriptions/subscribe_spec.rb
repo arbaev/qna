@@ -9,7 +9,6 @@ feature 'User can subscribe to question', %q{
   given(:user) { create :user }
   given(:question) { create :question, author: user }
   given(:question2) { create :question }
-  given!(:sub) { create :subscription, user: user, question: question }
 
   scenario 'Authenticated user with subscription', js: true do
     sign_in user
