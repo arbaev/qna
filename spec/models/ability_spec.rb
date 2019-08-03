@@ -24,10 +24,12 @@ RSpec.describe Ability do
     let(:question) { create :question, :with_attachment, author: user }
     let(:answer) { create :answer, :with_attachment, question: question, author: user }
     let(:answer_for_question_user2) { create :answer, question: question_user2, author: user }
+    let(:subscription) { create :subscription, user: user, question: question }
 
     let(:user2) { create :user }
     let(:question_user2) { create :question, :with_attachment, author: user2 }
     let(:answer_user2) { create :answer, :with_attachment, question: question, author: user2 }
+    let(:subscription_user2) { create :subscription, user: user2, question: question }
 
     it { should_not be_able_to :manage, :all }
 
@@ -35,6 +37,7 @@ RSpec.describe Ability do
       it { should be_able_to :create, Question }
       it { should be_able_to :create, Answer }
       it { should be_able_to :create, Comment }
+      it { should be_able_to :create, Subscription }
 
       it { should be_able_to :update, question }
       it { should_not be_able_to :update, question_user2 }
@@ -45,6 +48,8 @@ RSpec.describe Ability do
       it { should_not be_able_to :destroy, question_user2 }
       it { should be_able_to :destroy, answer }
       it { should_not be_able_to :destroy, answer_user2 }
+      it { should be_able_to :destroy, subscription }
+      it { should_not be_able_to :destroy, subscription_user2 }
     end
 
     context 'reading users profile' do

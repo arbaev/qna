@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :votes, dependent: :destroy
   has_many :comments, foreign_key: 'author_id', dependent: :destroy
   has_many :authorizations, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   def self.find_for_oauth(auth)
     Services::FindForOauth.new(auth).call
@@ -24,5 +25,9 @@ class User < ApplicationRecord
 
   def confirmation_required?
     false
+  end
+
+  def subscribed_to?(resource)
+    subscriptions.find_by(question_id: resource.id).present?
   end
 end

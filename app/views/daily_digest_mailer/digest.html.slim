@@ -1,0 +1,4 @@
+h1 List of new questions for last day from QNA
+ul
+  - @questions.each do |question|
+    li= link_to question.title, url_for(question)

@@ -13,6 +13,8 @@ class Answer < ApplicationRecord
   validates :body, presence: true
   validates :rating, presence: true, numericality: { only_integer: true }
 
+  after_create :new_answer_notification
+
   scope :best_first, -> { order(best: :desc, created_at: :asc) }
 
   def set_best!
@@ -23,5 +25,11 @@ class Answer < ApplicationRecord
 
       question.set_reward!(author)
     end
+  end
+
+  private
+
+  def new_answer_notification
+    NewAnswersJob.perform_later(self)
   end
 end

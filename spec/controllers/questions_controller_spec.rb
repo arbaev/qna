@@ -44,6 +44,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #create' do
     before { login(user) }
+    before { post :create, params: { question: attributes_for(:question) } }
 
     context 'with valid attributes' do
       it 'saves a new question in the database' do
@@ -51,19 +52,14 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'new question belongs to the logged user' do
-        post :create, params: { question: attributes_for(:question) }
-
         expect(assigns(:question).author).to eq user
       end
 
       it 'redirects to show view' do
-        post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to assigns(:question)
       end
 
       it 'broadcast to channel' do
-        post :create, params: { question: attributes_for(:question) }
-
         have_broadcasted_to("questions").with(text: question.title)
       end
     end
