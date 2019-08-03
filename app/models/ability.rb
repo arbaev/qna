@@ -32,6 +32,7 @@ class Ability
     can :create, :all
     can :update, [Question, Answer], author_id: user.id
     can :destroy, [Question, Answer], author_id: user.id
+    can :destroy, Subscription, user_id: user.id
 
     can :best, Answer, question: { author_id: user.id }
 

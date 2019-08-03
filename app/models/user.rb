@@ -26,4 +26,8 @@ class User < ApplicationRecord
   def confirmation_required?
     false
   end
+
+  def subscribed_to?(resource)
+    subscriptions.find_by(question_id: resource.id).present?
+  end
 end

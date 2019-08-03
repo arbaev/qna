@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, only: %i[new create update destroy delete_file]
   before_action :set_question, only: %i[show update destroy best_answer]
+  before_action :set_subscription, only: %i[show]
   before_action :authority!, only: %i[update destroy best_answer]
   after_action :publish, only: :create
 
@@ -60,6 +61,10 @@ class QuestionsController < ApplicationController
   def set_question
     @question = Question.with_attached_files.find(params[:id])
     gon.question_id = @question.id
+  end
+
+  def set_subscription
+    @subscription = @question.subscriptions.find_by(user: current_user)
   end
 
   def authority!

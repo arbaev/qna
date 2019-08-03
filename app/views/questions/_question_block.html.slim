@@ -45,4 +45,6 @@ h1.question__title = @question.title
       = form_with model: @question, class: 'hide', html: {id: "edit-question-form"} do |f|
         = render partial: 'form_fields', locals: { f: f }
 
+    - if can?(:create, Subscription)
+      = render 'subscriptions/subscription_block', resource: @question
     = render 'comments/comment_block', resource: @question
