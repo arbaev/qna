@@ -1,0 +1,4 @@
+li.content-list-item
+  h5.card-title
+    a href="#{question_path(resource)}" = resource.title
+    p = resource.body.truncate(100)

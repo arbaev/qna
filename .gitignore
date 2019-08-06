@@ -26,3 +26,7 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/database.yml
+
+# Ignore sphinxsearch config credentials and stuff
+/config/*.sphinx.conf
+/db/sphinx

@@ -1,0 +1,8 @@
+h1 Searching for #{@query[:q]} in #{@query[:resource]}
+.search-results
+  - if @results.empty?
+    p No results
+  - else
+    ol.content-list
+      - @results.each do |result|
+        = render partial: result.class.to_s.downcase, locals: { resource: result }
