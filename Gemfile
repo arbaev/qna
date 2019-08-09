@@ -67,6 +67,7 @@ gem 'cancancan'
 gem 'mini_racer'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+gem 'faker'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
@@ -77,7 +78,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8'
   gem 'action-cable-testing'
   gem 'factory_bot_rails'
-  gem 'faker'
   gem 'rspec-json_expectations'
 end
 
