@@ -64,6 +64,7 @@ gem 'mysql2'
 gem 'thinking-sphinx'
 # Authoring
 gem 'cancancan'
+gem 'mini_racer'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -89,6 +90,11 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   # preview email in the default browser
   gem "letter_opener"
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'capistrano-passenger', require: false
 end
 
 group :test do
