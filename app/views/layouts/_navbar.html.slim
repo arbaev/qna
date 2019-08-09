@@ -1,5 +1,6 @@
 nav.navbar.navbar-dark.bg-dark.mb-3
   = link_to 'QnA', root_path, class: 'navbar-brand logo__title'
+  = render 'search/search_form'
   .navbar-text
     -if user_signed_in?
       'Welcome,

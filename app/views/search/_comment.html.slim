@@ -1,0 +1,5 @@
+li.content-list-item
+  h5.card-title
+    a href="#{question_path(resource.commentable)}"
+      ' Comment for '#{resource.commentable.class.to_s}'
+    p = resource.body.truncate(100)

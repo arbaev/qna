@@ -35,6 +35,8 @@ Rails.application.routes.draw do
   resources :attachments, only: :destroy
   resources :users, only: :show
 
+  get :search, to: 'search#results'
+
   namespace :api do
     namespace :v1 do
       resources :profiles, only: :index do

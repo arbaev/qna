@@ -59,6 +59,9 @@ gem 'oj'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'whenever', require: false
+# Sphinx search
+gem 'mysql2'
+gem 'thinking-sphinx'
 # Authoring
 gem 'cancancan'
 # Use Capistrano for deployment
