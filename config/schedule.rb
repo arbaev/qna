@@ -1,3 +1,5 @@
+env :PATH, ENV['PATH']
+
 every 1.day, at: '6:59 am' do
   runner "DailyDigestJob.perform_now"
 end
