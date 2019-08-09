@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.configure do |config|
-  config.use_transactional_fixtures = false
+  # config.use_transactional_fixtures = false
 
   # DatabaseCleaner settings
   config.before(:suite) do
