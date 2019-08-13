@@ -1,13 +1,14 @@
-#question.card data-question-id=@question.id
-  =render 'question_block'
-hr
-h2 Answers
-ul.answers-list
-  - if @question.answers.present?
-    = render @question.answers.best_first
-  - else
-    li No answers yet
+- cache @question do
+  #question.card data-question-id=@question.id
+    =render 'question_block'
+  hr
+  h2 Answers
+  ul.answers-list
+    - if @question.answers.present?
+      = render @question.answers.best_first
+    - else
+      li No answers yet
 
-hr
-h2 Write new answer
-= render 'answers/form'
+  hr
+  h2 Write new answer
+  = render 'answers/form'
