@@ -66,8 +66,7 @@ gem 'thinking-sphinx'
 gem 'cancancan'
 gem 'mini_racer'
 gem 'unicorn'
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+gem 'redis-rails'
 gem 'faker'
 
 # Reduces boot times through caching; required in config/boot.rb
