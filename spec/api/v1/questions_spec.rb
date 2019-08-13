@@ -14,7 +14,8 @@ describe 'Questions API', type: :request do
 
     context 'authorized' do
       let!(:questions) { create_list(:question, 5) }
-      let(:question) { questions.first }
+      let(:question_id_min) { questions.pluck(:id).min }
+      let(:question) { questions.select { |q| q.id == question_id_min }.first }
       let!(:answers) { create_list(:answer, 3, question: question) }
 
       before { send verb, api_path, params: { access_token: access_token.token }, headers: headers }
@@ -28,22 +29,23 @@ describe 'Questions API', type: :request do
 
       it_behaves_like 'Attrs returnable' do
         let(:attrs) { %w[id title body created_at updated_at] }
-        let(:resource_response) { json['questions'].last }
-        let(:resource) { questions.last }
+        let(:resource_response) { json['questions'].select { |x| x['id'] == question.id }.first }
+        let(:resource) { question }
       end
 
       describe 'answers' do
-        let(:answer) { answers.first }
-        let(:answer_response) { json['questions'].first['answers'] }
+        let(:answer_id_min) { answers.pluck(:id).min }
+        let(:answer) { answers.select { |a| a.id == answer_id_min }.first }
+        let(:answers_response) { json['questions'].select { |x| x['id'] == question.id }.first['answers'] }
 
         it_behaves_like 'All items returnable' do
-          let(:resource_response) { answer_response }
+          let(:resource_response) { answers_response }
           let(:resource) { answers }
         end
 
         it_behaves_like 'Attrs returnable' do
           let(:attrs) { %w[id body created_at updated_at] }
-          let(:resource_response) { answer_response.first }
+          let(:resource_response) { answers_response.select { |x| x['id'] == answer.id }.first }
           let(:resource) { answer }
         end
       end
