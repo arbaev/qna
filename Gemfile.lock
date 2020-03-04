@@ -245,7 +245,7 @@ GEM
     pg (1.1.4)
     popper_js (1.14.5)
     public_suffix (3.1.1)
-    puma (3.12.1)
+    puma (3.12.4)
     rack (2.0.7)
     rack-protection (2.0.5)
       rack
@@ -471,7 +471,7 @@ DEPENDENCIES
   omniauth-mail_ru
   omniauth-vkontakte
   pg (>= 0.18, < 2.0)
-  puma (~> 3.11)
+  puma (~> 3.12)
   rails (~> 5.2.3)
   rails-controller-testing
   redis-rails
