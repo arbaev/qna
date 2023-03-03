@@ -1,24 +1,18 @@
-# README
+# QnA, сервис вопросов и ответов
+> Учебный проект по курсу Thinknetica «[Продвинутый Rails](https://thinknetica.com/ruby_on_rails)»
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Используемые технологии
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Git Flow
+- Ruby 2.7 и Rails 6
+- rSpec
+- ajax
+- ActiveStorage
+- ActionCable
+- OAuth
+- CanCanCan, Pundit
+- API, Doorkeeper
+- ActiveJob
+- sphinx
+- деплой: passenger, capistrano, nginx
+- мониторинг: unicorn, monit, gem backup
