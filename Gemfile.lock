@@ -236,7 +236,7 @@ GEM
     net-scp (2.0.0)
       net-ssh (>= 2.6.5, < 6.0.0)
     net-ssh (5.2.0)
-    nio4r (2.4.0)
+    nio4r (2.5.9)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
@@ -273,7 +273,7 @@ GEM
     pg (1.1.4)
     popper_js (1.14.5)
     public_suffix (4.0.7)
-    puma (4.3.12)
+    puma (5.6.7)
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.6.4)
@@ -496,7 +496,7 @@ DEPENDENCIES
   omniauth-mail_ru
   omniauth-vkontakte
   pg (>= 0.18, < 2.0)
-  puma (~> 4.3)
+  puma (~> 5.6)
   rails (~> 5.2.3)
   rails-controller-testing
   redis-rails
